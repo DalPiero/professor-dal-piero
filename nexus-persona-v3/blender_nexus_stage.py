@@ -11,7 +11,10 @@ photo = os.path.abspath(args[0])
 bpy.ops.object.select_all(action='SELECT')
 bpy.ops.object.delete(use_global=False)
 scene=bpy.context.scene
-scene.render.engine='BLENDER_EEVEE_NEXT' if hasattr(bpy.types,'BLENDER_EEVEE_NEXT') else 'BLENDER_EEVEE'
+try:
+    scene.render.engine='BLENDER_EEVEE_NEXT'
+except (TypeError, ValueError):
+    scene.render.engine='BLENDER_EEVEE'
 scene.render.resolution_x=1920
 scene.render.resolution_y=1080
 scene.render.resolution_percentage=100
@@ -33,7 +36,12 @@ img=bpy.data.images.load(photo,check_existing=True)
 bpy.ops.mesh.primitive_plane_add(size=2,location=(0,0,0))
 plane=bpy.context.object
 plane.name="FOTOGRAFIA_ORIGINAL_SEM_ALTERAR_ROSTO"
-plane.scale=(8,4.5,1)
+# Evitar esticar a identidade facial ou cortar a fotografia
+original_ratio=img.size[0]/img.size[1]
+max_w,max_h=8.45,4.72
+photo_w=min(max_w,max_h*original_ratio)
+photo_h=photo_w/original_ratio
+plane.scale=(photo_w/2,photo_h/2,1)
 mat=bpy.data.materials.new("ImagemAutorizada")
 mat.use_nodes=True
 nodes=mat.node_tree.nodes;nodes.clear()
@@ -46,11 +54,11 @@ plane.data.materials.clear();plane.data.materials.append(mat)
 # Fundo respeita o formato institucional — tela universitária, sem hologramas
 bpy.ops.object.camera_add(location=(0,0,13))
 cam=bpy.context.object;cam.name="CAMERA_EDITORIAL";scene.camera=cam
-cam.data.type='ORTHO';cam.data.ortho_scale=9.3
+cam.data.type='ORTHO';cam.data.ortho_scale=9.6
 def aim(obj,point=(0,0,0)):
     obj.rotation_euler=(Vector(point)-obj.location).to_track_quat('-Z','Y').to_euler()
 aim(cam)
-for f,scale,x in [(1,9.3,-.10),(96,9.0,0),(192,8.8,.06),(288,8.95,0)]:
+for f,scale,x in [(1,9.6,-.10),(96,9.45,0),(192,9.2,.06),(288,9.35,0)]:
     cam.data.ortho_scale=scale;cam.data.keyframe_insert(data_path="ortho_scale",frame=f)
     cam.location.x=x;cam.keyframe_insert(data_path="location",frame=f)
 # Transparência/mascara facial não usadas: nenhuma invenção anatômica.
