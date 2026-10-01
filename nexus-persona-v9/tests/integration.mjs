@@ -8,7 +8,7 @@ try{
  let started=false;
  for(let i=0;i<45;i++){
    if(child.exitCode!==null)throw Error("Backend exited: "+stderr);
-   if(stdout.includes("servidor")){started=true;break}
+   if(stdout.includes("backend pronto")){started=true;break}
    await new Promise(r=>setTimeout(r,150));
  }
  assert.ok(started,"Backend did not start: "+stderr);
