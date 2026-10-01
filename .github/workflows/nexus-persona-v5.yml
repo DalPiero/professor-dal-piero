@@ -1,0 +1,42 @@
+name: NEXUS PERSONA V5 - Build Blender Proxy
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - nexus-persona-v5-malha-facial
+    paths:
+      - "nexus-persona-v5/**"
+      - ".github/workflows/nexus-persona-v5.yml"
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install headless Blender
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y blender xvfb
+      - name: Build model, blend and glb
+        run: |
+          mkdir -p output
+          NEXUS_OUTPUT="$PWD/output" xvfb-run -a blender -b -t 2 -P nexus-persona-v5/build_persona.py -- --photo "$PWD/nexus-persona-v5/photo_reference.png"
+      - name: Validate produced file structure
+        run: |
+          test -s output/NEXUS_PERSONA_V5_PROTOTIPO.blend
+          python3 - <<'PY'
+          from pathlib import Path
+          d=Path('output')
+          print('BLEND: ', (d/'NEXUS_PERSONA_V5_PROTOTIPO.blend').stat().st_size)
+          print('GLB exists:', (d/'NEXUS_PERSONA_V5_MALHA.glb').exists())
+          print('Preview exists:', (d/'NEXUS_PERSONA_V5_PREVIEW.png').exists())
+          PY
+      - name: Upload Blender deliverables
+        uses: actions/upload-artifact@v4
+        with:
+          name: NEXUS_PERSONA_V5_BLENDER
+          path: output/
+          if-no-files-found: error
+          retention-days: 30
