@@ -1,0 +1,46 @@
+name: NEXUS V6 — Audit Original Videos
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - nexus-persona-v6-filmes-interativos
+    paths:
+      - "nexus-persona-v6/**"
+      - ".github/workflows/nexus-v6-media-audit.yml"
+  pull_request:
+    branches:
+      - nexus-persona-v5-malha-facial
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download exactly the two user-supplied video assets
+        run: |
+          mkdir -p inputs
+          curl --fail --location --retry 2 --connect-timeout 10 --max-time 150 "https://cdn.creativeclaw.co/u/5dd90fe8/videos/0228548f-b112-414c-9815-7cbff820e3ce.mp4" -o inputs/film1.mp4
+          curl --fail --location --retry 2 --connect-timeout 10 --max-time 150 "https://cdn.creativeclaw.co/u/5dd90fe8/videos/11cead6e-fce2-4fe3-a730-552bcea8d253.mp4" -o inputs/film2.mp4
+          test -s inputs/film1.mp4 && test -s inputs/film2.mp4
+      - name: Install FFmpeg analysis tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+      - name: Inspect without generative AI or credits
+        run: |
+          ffprobe -version | head -n 1
+          bash nexus-persona-v6/scripts/audit_videos.sh inputs/film1.mp4 inputs/film2.mp4
+          for n in 1 2; do
+            echo "=== Film $n ==="
+            cat "AUDITORIA_NEXUS_PERSONA/filme_$n/metadados.json" | python3 -c 'import json,sys;a=json.load(sys.stdin);print("DURATION",a["format"].get("duration"));[(print("STREAM",s.get("codec_type"),s.get("codec_name"),s.get("width"),s.get("height"),s.get("r_frame_rate"))) for s in a["streams"]]'
+            grep -e mean_volume -e max_volume "AUDITORIA_NEXUS_PERSONA/filme_$n/volume.log" || true
+          done
+      - name: Upload technical report and frame samples
+        uses: actions/upload-artifact@v4
+        with:
+          name: NEXUS_V6_FILMS_TECHNICAL_REPORT
+          path: AUDITORIA_NEXUS_PERSONA/
+          retention-days: 21
+          if-no-files-found: error
