@@ -1,0 +1,25 @@
+name: NEXUS V10 — Respostas da audiência
+on:
+  push:
+    branches:
+      - nexus-persona-v10-perguntas
+    paths:
+      - "nexus-persona-v10/**"
+      - ".github/workflows/nexus-v10-test.yml"
+  pull_request:
+    branches:
+      - nexus-persona-v9-audiencia-ao-vivo
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate local questions and response interface
+        run: node nexus-persona-v10/tests/smoke.mjs
