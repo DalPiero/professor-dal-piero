@@ -22,4 +22,6 @@ jobs:
         with:
           node-version: "22"
       - name: Verify frontend, backend, voice, alignment and media exclusivity
-        run: node nexus-persona-v9/tests/smoke.mjs
+        run: |
+          node nexus-persona-v9/tests/smoke.mjs
+          node nexus-persona-v9/tests/integration.mjs
