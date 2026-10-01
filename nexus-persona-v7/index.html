@@ -204,6 +204,8 @@ $("presenceStart").addEventListener("click",()=>{
  .catch(()=>presenceStatus("Pressione Play no próprio vídeo; o navegador impediu a reprodução automática."));
 });
 $("presencePause").addEventListener("click",()=>{realFilm2.pause();presenceStatus("Filme 2 pausado.")});
+for(const id of ["play1","play2","playSeries","previewAV"]){const elem=$(id);if(elem){elem.addEventListener("click",()=>realFilm2.pause(),{capture:true})}}
+
 $("presenceAsk").addEventListener("click",()=>{
  realFilm2.pause();$("question").focus();
  presenceStatus("Perguntas abertas. As respostas novas usam a base institucional e a voz de navegador, NÃO fingem ter a voz clonada.");
@@ -229,6 +231,8 @@ $("exportGestures").onclick=()=>{
  setTimeout(()=>URL.revokeObjectURL(url),1500);
 };
 realFilm2.onended=()=>presenceStatus("Filme concluído. Pressione 'Abrir perguntas' para interagir com o público.");
+realFilm2.addEventListener("loadedmetadata",()=>presenceStatus("Filme 2 carregado: "+Math.round(realFilm2.duration)+" segundos. Inspecione a gravação antes de definir trejeitos."));
+
 realFilm2.onerror=()=>presenceStatus("Falha no carregamento do Filme 2: verifique conexão e endereço da mídia.");
 const origStop=$("stop").onclick;
 $("stop").onclick=()=>{realFilm2.pause();origStop();presenceStatus("Reprodução interrompida.")};
