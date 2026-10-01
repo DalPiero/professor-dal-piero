@@ -141,6 +141,39 @@ for sign,tag in [(-1,"ESQUERDO"),(1,"DIREITO")]:
     sphere("IRIS_"+tag,(x,-.716,2.095),(.074,.024,.075),iris)
     sphere("PUPILA_"+tag,(x,-.738,2.095),(.037,.013,.044),black)
     sphere("SOBRANCELHA_"+tag,(x,-.677,2.24),(.218,.035,.034),hair)
+# Eyelids are REAL separate mesh morphs; they lower over visible eyeballs.
+# They supplement head-surface Blink keys and have identical names for GLB slider linking.
+for sign,tag in [(-1,"L"),(1,"R")]:
+    x0=sign*.335;vs=[];fs=[];cols=16
+    for row in range(2):
+        for j in range(cols+1):
+            u=-1+2*j/cols
+            x=x0+u*.183
+            arch=max(0,1-u*u)**.5
+            z=(2.186+.019*arch) if row==0 else (2.142+.004*arch)
+            y=-.743+.018*u*u
+            vs.append((x,y,z))
+    for j in range(cols):
+        fs.append((j,j+1,cols+2+j,cols+1+j))
+    me=bpy.data.meshes.new("PALPEBRA_"+tag+"_MALHA")
+    me.from_pydata(vs,[],fs);me.update()
+    eyelid=bpy.data.objects.new("PALPEBRA_"+tag,me)
+    bpy.context.collection.objects.link(eyelid)
+    me.materials.append(skin)
+    eyelid.shape_key_add(name="Basis")
+    # Left and right can close independently, both also exposed.
+    names=["BlinkLeft","BlinkRight","BlinkBoth"]
+    for name in names:
+        k=eyelid.shape_key_add(name=name)
+        should_close=name=="BlinkBoth" or (name=="BlinkLeft" and sign<0) or (name=="BlinkRight" and sign>0)
+        if should_close:
+            for j,v in enumerate(vs):
+                if j>=cols+1:  # lower edge of upper lid moves over iris
+                    k.data[j].co=(v[0],v[1]-.019,v[2]-.122)
+                else:
+                    k.data[j].co=(v[0],v[1]-.009,v[2]-.014)
+        k.value=0
+    for poly in me.polygons: poly.use_smooth=True
 def curve(name,pts,material,thick=.009,cyclic=False):
     cu=bpy.data.curves.new(name,"CURVE");cu.dimensions="3D"
     c=cu.splines.new("POLY");c.points.add(len(pts)-1)
@@ -182,7 +215,7 @@ if photo:
     o.data.materials.append(m)
 # move bust right but keep local mesh shape key coordinates
 for ob in list(bpy.context.scene.objects):
-    if ob.name.startswith(("CABECA","OLHO_","IRIS_","PUPILA_","SOBRANCELHA_","ARMACAO_","PONTE_OCULOS","BARBA_","BIGODE_","PEITO_","CAMISA","PESCOCO")):
+    if ob.name.startswith(("CABECA","OLHO_","IRIS_","PUPILA_","PALPEBRA_","SOBRANCELHA_","ARMACAO_","PONTE_OCULOS","BARBA_","BIGODE_","PEITO_","CAMISA","PESCOCO")):
         ob.location.x+=1.60
 # gallery stage
 bpy.ops.mesh.primitive_plane_add(size=2,location=(0,.54,1.75))
@@ -210,7 +243,7 @@ for n in ["Smile","Frown","Surprise","JawOpen","BlinkBoth"]+["MOUTH_"+a for a in
     key(n,1,0)
 timeline=[("Smile",13,21),("BlinkBoth",29,32),("Surprise",43,52),
           ("JawOpen",63,71),("MOUTH_A",80,89),("MOUTH_E",97,106),
-          ("MOUTH_O",112,113),("Frown",127,137)]
+          ("Frown",127,137)]
 timeline=[x for x in timeline if x[0] in head.data.shape_keys.key_blocks]
 for name,start,end in timeline:
     key(name,start-2,0);key(name,start,1);key(name,end,1);key(name,end+3,0)
