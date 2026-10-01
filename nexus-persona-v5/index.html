@@ -1,0 +1,64 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NEXUS PERSONA — Laboratório 3D V5</title><style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;font:16px/1.45 system-ui,Segoe UI;background:#081a2a;color:#f1f5f8}header{padding:22px 3vw;border-bottom:3px solid #c5a365}h1{color:#e8c781;margin:0;font-size:clamp(22px,3vw,38px)}main{max-width:1450px;margin:auto;display:grid;grid-template-columns:minmax(280px,410px) 1fr;gap:16px;padding:16px}section{background:#102b43;border:1px solid #40627d;border-radius:12px;padding:17px}.photo{width:100%;border-radius:9px;aspect-ratio:16/9;object-fit:contain;background:#04101a}.viewer{width:100%;height:min(65vh,670px);min-height:350px;background:radial-gradient(#37526a,#061829);border-radius:12px;position:relative}.viewer canvas{display:block;width:100%;height:100%;border-radius:12px}.placeholder{position:absolute;inset:0;display:grid;place-items:center;padding:24px;text-align:center;color:#c7d6e1;pointer-events:none}.controls{display:grid;gap:8px}.row{display:flex;align-items:center;justify-content:space-between;gap:12px}label{font-weight:600}input[type=range]{width:55%;accent-color:#d4b77c}button,.pick{background:#2a536d;color:white;border:1px solid #8aa2b7;padding:9px;border-radius:7px;cursor:pointer}button:focus-visible{outline:3px solid gold}p.small,footer{color:#c5d6e3;font-size:.9rem}.warning{padding:12px;background:#473824;border-left:4px solid #efc98e;border-radius:7px;margin:12px 0}a{color:#f2d591}.bar{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}.bar button{flex:1}#status{min-height:34px;color:#ffe4a4}@media(max-width:870px){main{grid-template-columns:1fr}}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.163.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.163.0/examples/jsm/"}}</script></head><body>
+<header><div style="letter-spacing:.16em;font-size:.85rem">DAL PIERO NEXUS 2075 • LABORATÓRIO DE EXPRESSÕES</div><h1>NEXUS PERSONA — MALHA FACIAL V5</h1><p>Referência fotográfica e modelo tridimensional técnico; sem promessa de semelhança biométrica nesta versão.</p></header>
+<main>
+<section><h2>Fotografia de referência</h2><img id="reference" class="photo" src="https://cdn.creativeclaw.co/u/5dd90fe8/images/1d6c7262-d831-4938-8dba-fee75fd88dae.png" alt="Fotografia de referência fornecida para o avatar NEXUS PERSONA">
+<p class="small">A fotografia mostra a identidade de referência. O modelo ao lado é um busto técnico provisório; ajuste de semelhança requer validação presencial e novas vistas.</p>
+<h2>Carregar o arquivo 3D</h2><input id="glb" type="file" accept=".glb,model/gltf-binary" aria-label="Carregar modelo GLB gerado no Blender">
+<p class="small">Obtenha o GLB gerado pelo fluxo de construção do projeto ou exporte-o do Blender. O modelo é carregado localmente, sem enviar seu arquivo ao servidor da interface.</p>
+<div class="bar"><button id="reset">Restaurar expressões</button><button id="demo">Executar demonstração</button><button id="pause">Pausar</button></div>
+<div id="status" role="status" aria-live="polite">Aguardando modelo 3D. A fotografia está disponível para comparação.</div>
+<div class="warning"><strong>Critério de qualidade:</strong> controles 3D comprovados não demonstram ainda correspondência anatômica exata ao rosto da fotografia. Não use como representação fidedigna antes da revisão das vistas frontal e laterais.</div>
+<p class="small"><a href="https://github.com/DalPiero/professor-dal-piero/tree/nexus-persona-v5-malha-facial/nexus-persona-v5" target="_blank" rel="noopener">Arquivos de construção e manual do modelo Blender</a></p>
+</section>
+<section><h2>Prévia volumétrica interativa</h2><div class="viewer" id="viewer"><div class="placeholder" id="placeholder">Carregue o arquivo <strong style="margin:0 4px">NEXUS_PERSONA_V5_MALHA.glb</strong> para visualizar e girar a cabeça tridimensional.</div></div><h2>Controles de expressão e boca</h2><div class="controls" id="morphControls"><p class="small">Os controles surgirão automaticamente conforme os nomes das Shape Keys efetivamente presentes no modelo carregado.</p></div></section></main>
+<footer style="padding:0 22px 20px">NEXUS PERSONA V5 · Protótipo técnico de modelagem · A interação falada permanece disponível na <a href="../nexus-persona-v4/index.html">interface V4</a>.</footer>
+<script type="module">
+import * as THREE from "three";
+import {GLTFLoader} from "three/addons/loaders/GLTFLoader.js";
+import {OrbitControls} from "three/addons/controls/OrbitControls.js";
+const $=id=>document.getElementById(id),holder=$("viewer");
+const stage=new THREE.Scene();stage.background=new THREE.Color(0x0a253c);
+const camera=new THREE.PerspectiveCamera(42,1,.02,150);camera.position.set(0,-8,2.0);
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.outputColorSpace=THREE.SRGBColorSpace;holder.appendChild(renderer.domElement);
+stage.add(new THREE.HemisphereLight(0xf3eddf,0x405366,2.5));
+let keylight=new THREE.DirectionalLight(0xffffff,3);keylight.position.set(-3,-5,8);stage.add(keylight);
+let fill=new THREE.DirectionalLight(0xc5e2f5,1.5);fill.position.set(4,-2,4);stage.add(fill);
+let controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.target.set(0,0,1.65);
+let root=null,morphMeshes=[],morphMap={},playing=false,objectURL=null;
+const keyLabels={JawOpen:"Mandíbula aberta",Smile:"Sorriso",Frown:"Expressão de desagrado",Surprise:"Surpresa",
+BrowInnerUp:"Sobrancelhas internas elevadas",BrowDown:"Sobrancelhas baixas",BlinkLeft:"Piscar olho esquerdo",
+BlinkRight:"Piscar olho direito",BlinkBoth:"Piscar ambos"};
+function fit(){const w=holder.clientWidth,h=holder.clientHeight;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h,false)}
+const ro=new ResizeObserver(fit);ro.observe(holder);fit();
+function status(t){$("status").textContent=t}
+function reset(){Object.entries(morphMap).forEach(([k,list])=>list.forEach(m=>m.obj.morphTargetInfluences[m.i]=0));document.querySelectorAll("input[data-morph]").forEach(x=>x.value=0);status("Expressões neutras.")}
+function apply(name,value){for(let m of morphMap[name]||[])m.obj.morphTargetInfluences[m.i]=value}
+function renderControls(){
+let area=$("morphControls");area.replaceChildren();const names=Object.keys(morphMap).sort((a,b)=>a.localeCompare(b));
+if(!names.length){area.textContent="Nenhuma shape key foi encontrada no modelo. Exporte GLB com morph targets ativos.";return}
+for(const name of names){const row=document.createElement("div");row.className="row";const label=document.createElement("label");const id="m"+name.replace(/[^a-z0-9]/gi,"");label.htmlFor=id;label.textContent=keyLabels[name]||name;const range=document.createElement("input");range.type="range";range.min="0";range.max="1";range.step=".01";range.value="0";range.id=id;range.dataset.morph=name;range.addEventListener("input",()=>{playing=false;apply(name,Number(range.value))});row.append(label,range);area.append(row)}
+status(names.length+" controles encontrados. Explore cada expressão e compare com a fotografia.")
+}
+$("glb").onchange=async e=>{
+const file=e.target.files[0];if(!file)return;
+if(!/\.glb$/i.test(file.name)||file.size>170*1024*1024){status("Selecione um GLB válido de até 170 MB.");return}
+playing=false;if(root){stage.remove(root);root.traverse(x=>{if(x.isMesh){x.geometry.dispose();const m=x.material;for(const item of Array.isArray(m)?m:[m])item.dispose()}});root=null}
+if(objectURL)URL.revokeObjectURL(objectURL);objectURL=URL.createObjectURL(file);
+status("Carregando a malha tridimensional...");
+new GLTFLoader().load(objectURL,gltf=>{
+root=gltf.scene;stage.add(root);morphMap={};root.traverse(obj=>{if(obj.isMesh&&obj.morphTargetDictionary){for(const [name,i]of Object.entries(obj.morphTargetDictionary)){(morphMap[name]||=[]).push({obj,i})}}});
+$("placeholder").remove();const box=new THREE.Box3().setFromObject(root),center=box.getCenter(new THREE.Vector3()),size=box.getSize(new THREE.Vector3());
+controls.target.copy(center);camera.position.copy(center).add(new THREE.Vector3(0,-Math.max(size.x,size.y,size.z)*2.2,Math.max(size.z*.25,.2)));camera.lookAt(center);controls.update();renderControls();
+},null,error=>status("Falha no carregamento do GLB. Verifique o arquivo exportado. "+error.message));
+};
+$("reset").onclick=()=>{playing=false;reset()};
+$("demo").onclick=()=>{if(!root){status("Carregue primeiro o GLB.");return}playing=true;status("Demonstração automática ilustrativa (não sincronizada com voz).")};
+$("pause").onclick=()=>{playing=false;status("Demonstração pausada.")};
+let clock=new THREE.Clock();
+function animate(){requestAnimationFrame(animate);controls.update();if(playing){const t=clock.getElapsedTime();const arr=["Smile","JawOpen","BlinkBoth","Surprise","MOUTH_A","MOUTH_E","MOUTH_O","MOUTH_B"];for(let k of Object.keys(morphMap))apply(k,0);const current=arr[Math.floor(t/1.5)%arr.length];if(morphMap[current])apply(current,(Math.sin((t%1.5)/1.5*Math.PI))**2);for(const el of document.querySelectorAll("input[data-morph]")){const key=el.dataset.morph;el.value=morphMap[key]?.[0]?.obj.morphTargetInfluences[morphMap[key][0].i]||0}}renderer.render(stage,camera)}
+animate();
+</script></body></html>
