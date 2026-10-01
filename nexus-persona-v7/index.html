@@ -1,0 +1,239 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NEXUS PERSONA 2 — BRASIL 2075</title><style>
+:root{--bg:#08192c;--ink:#eaf1f5;--accent:#e6c486;--panel:#12304a}*{box-sizing:border-box}body{margin:0;background:linear-gradient(145deg,#071728,#1b3a55);color:var(--ink);font:17px/1.45 system-ui,Segoe UI,sans-serif}header,main,footer{max-width:1350px;margin:auto;padding:18px}h1,h2{font-family:Georgia,serif}h1{margin:0;font-size:2rem;color:var(--accent)}.eyebrow{letter-spacing:.18em;font-size:.76rem}.layout{display:grid;grid-template-columns:minmax(290px,450px) 1fr;gap:18px}.panel{background:#0d273e;border:1px solid #52728a;border-radius:16px;padding:18px}.portrait{height:340px;background:radial-gradient(#3d5970,#071827);display:grid;place-items:center;border:2px solid #806a47;border-radius:12px;overflow:hidden;position:relative}.portrait img{width:100%;height:100%;object-fit:contain}.portrait svg{height:240px;width:190px}.portrait.speaking{box-shadow:0 0 20px #d4b780}.bars{position:absolute;bottom:12px;left:15px;display:none;gap:3px;height:35px;align-items:end}.speaking .bars{display:flex}.bars i{width:5px;background:var(--accent);height:20px;animation:jump .6s ease-in-out infinite alternate}.bars i:nth-child(2){animation-delay:.25s}.bars i:nth-child(3){animation-delay:.4s}@keyframes jump{from{height:3px}to{height:30px}}button,select,input,textarea{font:inherit}button{border:1px solid #abbdc7;color:var(--ink);background:#285071;border-radius:9px;padding:9px 11px;cursor:pointer}button:hover,button:focus-visible{background:#426f90}button:disabled{opacity:.4}textarea{width:100%;height:88px;resize:vertical}textarea,input,select{color:#142b40;background:#fafcff;border-radius:9px;padding:10px;border:1px solid #8295a7}label{display:block;margin:11px 0 4px;font-weight:bold}.controls{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.answer{padding:16px;background:#092033;border-left:4px solid var(--accent);min-height:160px;white-space:pre-wrap}.fine{color:#c8d5df;font-size:.86rem}a{color:#efcd8b}.chip{font-size:.88rem}#source{font-size:.83rem;color:#edcf97;margin-top:9px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px}.badge{color:var(--accent);font-size:.82rem}#log{max-height:190px;overflow:auto}#log p{padding:6px;border-bottom:1px solid #38546d}#status{min-height:25px;color:#edcf97}.is-hidden{display:none}@media(max-width:840px){.layout{grid-template-columns:1fr}}.media-stage{position:relative;margin-top:12px;border:1px solid #58768c;border-radius:12px;background:#061423;overflow:hidden}
+.media-stage video{display:none;width:100%;max-height:320px;object-fit:contain;background:#061423}
+.media-stage.ready video{display:block}
+.media-stage .medialabel{padding:8px 11px;font-size:.85rem;color:#f2d99e}
+.media-stage .medialabel strong{display:block}
+#avatarTranscript{background:#172d40;min-height:48px;border-radius:8px;margin-top:12px;padding:12px;white-space:pre-wrap}
+#studioHelp{padding:10px;border-left:4px solid #e6c486;background:#18354e;font-size:.86rem}
+body.high-contrast{background:#000;color:#fff}body.high-contrast .panel{background:#000;border:2px solid #fff}body.high-contrast .fine{color:white}
+@media(prefers-reduced-motion:reduce){.bars i{animation:none}}
+
+/* A fotografia autorizada é a imagem principal, sem exigir seleção manual. */
+.photo-ready{height:390px;min-height:260px}.photo-ready>img{width:100%;height:100%;object-fit:contain;display:block}.photo-ready.speaking>img{animation:nexusBreathing 5s ease-in-out infinite;transform-origin:50% 85%}@keyframes nexusBreathing{0%,100%{transform:scale(1)}50%{transform:scale(1.008)}}@media(prefers-reduced-motion:reduce){.photo-ready.speaking>img{animation:none}}
+
+#filmLab{margin:16px 0;padding:14px;border:1px solid #8faebc;border-radius:12px;background:#071d30}
+#filmLab button{margin:3px}
+#filmLab .review{font-size:.91rem;display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+#filmLab .review label{display:inline-block;font-weight:400;margin:2px}
+#filmLab .vinfo{font-size:.84rem;color:#c7d8e1}
+#filmLab input[type=range]{width:50%}
+#filmLab #seekBtn{min-width:100px}
+
+.identity-stage{border:1px solid #b99b66;border-radius:13px;background:#112e47;padding:13px;margin:16px 0}.presencePreview{background:#051726;max-height:440px;display:flex;justify-content:center;border-radius:9px;overflow:hidden}.presencePreview video{width:100%;max-height:440px;object-fit:contain}.identity-stage summary{cursor:pointer;padding:10px}.identity-stage h3{color:#f5d9a2}
+</style></head><body>
+<header><div class="eyebrow">DAL PIERO NEXUS 2075 • PROTÓTIPO EXPERIMENTAL</div><h1>NEXUS PERSONA</h1><p>Apresentador interativo universitário · Conhecimento, Gravitas e Liberdade de Escolher</p></header>
+<main class="layout"><section class="panel"><div class="portrait photo-ready" id="portrait"><img id="avatarPhoto" src="https://cdn.creativeclaw.co/u/5dd90fe8/images/1d6c7262-d831-4938-8dba-fee75fd88dae.png" alt="Retrato institucional autorizado do apresentador NEXUS PERSONA" loading="eager" decoding="async" referrerpolicy="no-referrer" onerror="this.alt='Fotografia indisponível por falta de conexão. Selecione a fotografia no computador abaixo.';this.hidden=true;document.getElementById('photoFail').hidden=false"><span id="photoFail" hidden role="status" style="position:absolute;top:15px;left:16px;right:16px;background:#3d2730;color:#fff;padding:12px;border-radius:8px">Fotografia não carregada. Verifique a conexão ou selecione uma foto local.</span><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span></div>
+
+
+<div id="filmLab" aria-label="Acervo audiovisual dos dois vídeos de apresentação">
+<h3 style="margin:0 0 6px">FILMES AUTORIZADOS — CONHECIMENTO DEVE CIRCULAR</h3>
+<p class="fine">Os vídeos enviados pelo projeto estão pré-configurados. A apresentação reproduz o áudio original dos filmes, sem gerar outra voz, e ao terminar retorna às perguntas do público.</p>
+<div class="controls">
+<button type="button" id="play1">▶ Filme 1</button>
+<button type="button" id="play2">▶ Filme 2</button>
+<button type="button" id="playSeries" style="background:#386d58">▶ Apresentação completa (1 + 2)</button>
+<button type="button" id="exitFilms">Encerrar apresentação</button>
+</div>
+<p class="vinfo" id="filmStatus" role="status" aria-live="polite">Pronto para carregar os vídeos.</p>
+<div class="controls"><label for="filmVolume">Volume original</label><input id="filmVolume" type="range" min="0" max="1" step=".05" value=".9"/></div>
+<details><summary>Revisão visual e sincronização (operador)</summary>
+<p class="fine">Faça esta conferência nos próprios filmes antes do evento. A sequência é operacional, mas só um vídeo cujos lábios já estejam sincronizados mantém sincronização real durante sua reprodução.</p>
+<div class="controls"><button type="button" id="seek25">Examinar 25%</button><button type="button" id="seek50">Examinar 50%</button><button type="button" id="seek75">Examinar 75%</button></div>
+<div class="review" id="review">
+<label><input type="checkbox" data-qa="face"/> Rosto enquadrado</label>
+<label><input type="checkbox" data-qa="mouth"/> Boca visível nos trechos falados</label>
+<label><input type="checkbox" data-qa="sync"/> Movimento labial corresponde à própria voz</label>
+<label><input type="checkbox" data-qa="identity"/> Identidade visual preservada</label>
+<label><input type="checkbox" data-qa="sound"/> Áudio inteligível</label>
+</div>
+<p class="fine" id="qaStatus">Revisão pendente.</p>
+</details>
+</div>
+<div class="identity-stage" id="identityStage">
+<h3>Presença digital — Filme 2</h3>
+<p class="fine">O rosto, a postura e a voz desta apresentação vêm diretamente da gravação enviada, sem regeneração ou substituição de identidade. A gravação não produz respostas novas.</p>
+<div class="controls"><button type="button" id="presenceStart">▶ Apresentar com o Filme 2</button><button type="button" id="presencePause">⏸ Pausar</button><button type="button" id="presenceAsk">🎙️ Abrir perguntas</button></div>
+<div class="presencePreview" id="presencePreview">
+<video id="presenceVideo" playsinline controls preload="metadata" poster="https://cdn.creativeclaw.co/u/5dd90fe8/images/1d6c7262-d831-4938-8dba-fee75fd88dae.png" src="https://cdn.creativeclaw.co/u/5dd90fe8/videos/11cead6e-fce2-4fe3-a730-552bcea8d253.mp4" aria-label="Filme 2 original de referência, com gestos e voz da gravação enviada"></video>
+</div>
+<p id="presenceState" class="fine" role="status" aria-live="polite">Filme 2 disponível para apresentação e observação de trejeitos.</p>
+<details><summary>Catalogar trechos reais de gestos (operador)</summary>
+<p class="fine">Pause no início e no final de um movimento visível; registre-o como referência. Esta marcação é manual, não é captura facial automática nem sincronização labial gerada.</p>
+<div class="controls"><button type="button" id="markStart">Marcar início</button><button type="button" id="markEnd">Marcar fim</button></div>
+<label for="gestureType">Expressão ou trejeito observado</label><select id="gestureType"><option value="olhar">Direção do olhar</option><option value="cabeça">Movimento de cabeça</option><option value="sobrancelhas">Sobrancelhas</option><option value="piscada">Piscada</option><option value="sorriso">Sorriso</option><option value="pausa">Pausa expressiva</option><option value="boca">Movimento da boca</option><option value="mãos">Mãos / postura</option></select>
+<div class="controls"><button type="button" id="saveGesture">Guardar trecho</button><button type="button" id="exportGestures">Exportar marcações JSON</button></div><p id="gestureTime" class="fine" aria-live="polite">Início: — | Fim: —</p><div id="gestureList" class="fine"></div>
+</details>
+</div>
+<div class="media-stage" id="mediaStage">
+<video id="approvedVideo" playsinline controls preload="metadata" aria-label="Vídeo de apresentação autorizado, previamente sincronizado com o áudio">
+Seu navegador não suporta vídeo HTML5.
+</video>
+<div class="medialabel"><strong>ESTÚDIO AUDIOVISUAL</strong><span id="mediaState">Sem clipe aprovado carregado — fotografia estática.</span></div>
+</div>
+<label for="clip">Vídeo aprovado do avatar (MP4/WEBM com voz e lábios sincronizados)</label><input type="file" id="clip" accept="video/mp4,video/webm">
+<label for="introAudio">Ou áudio aprovado da apresentação (MP3/WAV/M4A)</label><input type="file" id="introAudio" accept="audio/mpeg,audio/wav,audio/mp4,audio/x-m4a">
+<audio id="approvedAudio" preload="metadata" controls style="width:100%;margin-top:8px" aria-label="Áudio autorizado de apresentação"></audio>
+<label for="captions">Legendas revisadas (WEBVTT)</label><input type="file" id="captions" accept=".vtt,text/vtt">
+<div class="controls"><button type="button" id="previewAV">▶ Reproduzir clipe aprovado</button><button type="button" id="pauseAV">⏸ Pausar</button><button type="button" id="fullAV">⛶ Tela cheia</button><button type="button" id="contrast">Alto contraste</button></div>
+<div id="studioHelp">Apenas um vídeo do avatar previamente aprovado oferece sincronização labial visual verdadeira nesta etapa. Durante respostas inéditas, a interface usa fotografia estática com indicador de fala — não simula uma boca sincronizada.</div>
+<label for="introScript">Texto institucional da apresentação / teleprompter</label>
+<textarea id="introScript" rows="4">Sejam bem-vindos. Sou o NEXUS PERSONA, avatar digital de apresentação do programa DAL PIERO NEXUS 2075. Nossa proposta investiga como inteligência humana e inteligência artificial podem colaborar sob supervisão e avaliação científica. Conhecimento, Gravitas e Liberdade de Escolher.</textarea>
+<div id="avatarTranscript" aria-live="polite">Teleprompter pronto.</div>
+<p class="fine">Para preservar a identidade facial, carregue a fotografia autorizada. A imagem continua estática nesta versão; as barras indicam fala sintética, não sincronização labial.</p><label for="image">Fotografia autorizada (processada localmente)</label><input type="file" id="image" accept="image/jpeg,image/png,image/webp"><div class="controls"><button id="intro">▶ Apresentar projeto</button><button id="next">Próximo tópico</button><button id="stop">■ Silenciar</button></div><label for="language">Idioma da voz</label><select id="language"><option value="pt-BR">Português (Brasil)</option><option value="en-US">English</option><option value="es-ES">Español</option><option value="fr-FR">Français</option><option value="it-IT">Italiano</option></select><label for="speed">Velocidade da fala</label><input type="range" id="speed" min=".7" max="1.3" value=".95" step=".05"><p class="fine">Outros idiomas dependem das vozes instaladas. Respostas multilíngues exigem tradução disponível ou servidor configurado.</p><div id="status" role="status" aria-live="polite">Pronto para começar.</div></section>
+<section class="panel"><h2>Interação com o público</h2><p>As perguntas podem ser feitas por texto ou microfone. O modo gratuito responde somente com base nas informações autorizadas abaixo. O modo com servidor requer autenticação privada do operador.</p><div class="grid" id="suggestions"></div><label for="question">Pergunta</label><textarea id="question" placeholder="Qual é a proposta do NEXUS EDU?"></textarea><div class="controls"><button id="send">Responder</button><button id="mic">🎙️ Microfone</button><button id="read">🔊 Ouvir</button><button id="clear">Limpar histórico</button></div><label for="autoSpeak"><input type="checkbox" id="autoSpeak" checked> Ler automaticamente as respostas (modo auditório)</label>
+<div class="controls"><button type="button" id="askLive">🎙️ Perguntar e ouvir resposta</button><button type="button" id="photoReset">Restaurar foto oficial</button></div><p class="fine">A foto permanece fiel ao original. O movimento é apenas aproximação de câmera; não há alterações artificiais de boca ou olhos. Para animação facial real, carregue um vídeo autorizado sincronizado no Estúdio Audiovisual.</p><div id="answer" class="answer" aria-live="polite">Bem-vindos. Escolha um tema para começar.</div><div id="source">Fonte: apresentação universitária BRASIL 2075.</div><p><label><input id="remote" type="checkbox"> Ativar servidor conversacional (opcional)</label></p><label for="endpoint">Endereço do servidor autorizado</label><input id="endpoint" type="url" style="width:100%" placeholder="https://seu-servidor.exemplo/api/chat"><p class="fine">Não cole chaves de API aqui. Perguntas poderão ser transmitidas ao servidor somente ao ativar esta opção. Configure HTTPS, autenticação, limites de uso e consentimento antes de publicar.</p><div class="controls"><button id="export">Exportar histórico (.txt)</button></div><div id="log" aria-label="Histórico nesta sessão"></div><p class="fine">Este demonstrador não armazena histórico permanentemente. Reconhecimento de fala pode utilizar processamento externo do navegador. Peça consentimento ao público.</p><p class="fine">O avatar é uma representação digital e não possui consciência, emoções próprias ou competência profissional. Em temas médicos, responde apenas sobre as propostas acadêmicas.</p></section></main><footer><a href="https://dalpiero.github.io/professor-dal-piero/" target="_blank" rel="noopener">Página institucional</a> · <a href="https://orcid.org/0009-0008-1451-149X" target="_blank" rel="noopener">ORCID</a> <p class="fine">NEXUS PERSONA V2 — protótipo verificável, não produto clínico, docente ou de decisão autônoma.</p></footer>
+<script>
+"use strict";const $=x=>document.getElementById(x);let last="",imageURL=null,idx=0,operatorToken="";const history=[];const topics=[
+["BRASIL 2075","O que é BRASIL 2075?","A proposta BRASIL 2075 investiga possíveis formas de colaboração entre inteligência humana e inteligência artificial. O horizonte 2075 não é previsão. As aplicações precisam de pesquisa, evidências e avaliação de consequências.",["brasil 2075","futuro","projeto","programa"]],
+["Três níveis","Quais os níveis de integração humano–IA?","São três níveis: integração funcional com ferramentas digitais já acessíveis; integração assistiva e neurotecnológica sujeita a validação; e integração cognitiva profunda como hipótese científica de longo prazo, não resultado demonstrado.",["nivel","integracao","neuro","hipotese"]],
+["NEXUS","O que significa NEXUS?","A apresentação organiza NEXUS em Neurociência, Educação e Expansão, Experiência Humano–Máquina, Universalização do Conhecimento e Sistemas Inteligentes.",["nexus","significa","nome"]],
+["NEXUS EDU","O que faz o NEXUS EDU?","NEXUS EDU é uma frente proposta para estudar aprendizagem apoiada por ferramentas inteligentes e atividades por desafios, mantendo professores e instituições responsáveis pela educação.",["edu","educacao","ensino","aprender","professor"]],
+["MED e ODONTO","O que fazem NEXUS MED e ODONTO?","NEXUS MED propõe pacientes virtuais e educação em saúde. NEXUS ODONTO propõe representações anatômicas e apoio à formação odontológica. Não substituem atendimento ou supervisão profissional.",["med","odonto","medicina","odontologia","saude"]],
+["Outros núcleos","Quais são os outros núcleos?","NEXUS MIND contempla cognição e interação humano–máquina; MEMORY, acervos e preservação; CORE, arquitetura e segurança; UNIVERSAL, tradução e mediação linguística. Cada núcleo demanda validação específica.",["mind","memory","core","universal","nucleos"]],
+["Projeto-piloto","Como funciona o piloto universitário?","O piloto proposto dura 90 dias: definir problema e recursos, preparar métodos, executar atividades autorizadas e elaborar relatório. Sua realização depende de autorização e decisão institucional.",["piloto","90 dias","universidade","participar","parceria"]],
+["Ética e privacidade","Quais são os limites éticos?","Identidade, voz e dados pessoais requerem autorização. O projeto prevê supervisão, privacidade, acessibilidade, auditoria e testes. A inteligência artificial é instrumento e não autoridade sobre decisões humanas.",["etica","privacidade","limites","autorizacao","responsabilidade"]],
+["Infraestrutura","São necessárias salas futuristas?","Não. A proposta começa em salas universitárias convencionais com computadores, telas, câmeras e microfones. Qualquer expansão planejada até 2054 dependerá de avaliação e recursos.",["sala","infraestrutura","equipamento","2054"]],
+["Contato","Como conhecer melhor o projeto?","Consulte a apresentação institucional BRASIL 2075 e a página institucional do Professor Doutor Fernando Antonio Dal Piero. Instituições interessadas podem definir objetivos e avaliar um piloto adequado às suas prioridades.",["contato","conhecer","institucional"]]
+];const clean=t=>t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9 ]/g," ").trim();topics.forEach((t,i)=>{const b=document.createElement("button");b.className="chip";b.textContent=t[0];b.onclick=()=>{idx=i;$("question").value=t[1];answer(t[1])};$("suggestions").append(b)});
+function setStatus(t){$("status").textContent=t}function speak(t){if(!window.speechSynthesis){setStatus("Voz sintética indisponível.");return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang=$("language").value;u.rate=Number($("speed").value);let voices=speechSynthesis.getVoices();u.voice=voices.find(x=>x.lang.toLowerCase()==u.lang.toLowerCase())||voices.find(x=>x.lang.slice(0,2)==u.lang.slice(0,2))||null;u.onstart=()=>{$("portrait").classList.add("speaking");setStatus("Apresentador falando")};u.onend=u.onerror=()=>{$("portrait").classList.remove("speaking");setStatus("Pronto")};speechSynthesis.speak(u)}
+function show(q,a,src){last=a;$("answer").textContent=a;$("source").textContent="Fonte: "+src;history.push({q,a});const p=document.createElement("p");p.textContent=q+" — "+a;$("log").prepend(p)}
+function local(q){const s=clean(q);let best=null,score=0;for(const t of topics){let v=0;for(const k of t[3]){const n=clean(k);if(s.includes(n))v+=n.split(" ").length+2;else if(n.length>4&&s.split(" ").includes(n))v++}if(v>score){score=v;best=t}}if(score<2||!best)return ["Não encontrei informação suficiente no material institucional resumido para responder a esta pergunta com segurança. Consulte a apresentação oficial ou o responsável pelo projeto.","base local — informação insuficiente"];return [best[2],"apresentação BRASIL 2075 · "+best[0]]}
+async function answer(q){playlistMode=false;resetVideoIfAnswer();q=q.trim();if(!q)return;setStatus("Consultando...");if($("remote").checked){const endpoint=$("endpoint").value.trim();if(!endpoint.startsWith("https://")){show(q,"Configure um endereço HTTPS válido para o servidor antes de ativar o modo conversacional.","configuração pendente");setStatus("Configuração incompleta");return}if(!operatorToken){operatorToken=window.prompt("Acesso privado: informe o token temporário do operador. Não use esta opção num quiosque público nem compartilhe o token com a plateia.")||"";if(!operatorToken){setStatus("Sessão privada não autorizada");return}}try{const ctrl=new AbortController(),id=setTimeout(()=>ctrl.abort(),22000);const r=await fetch(endpoint,{method:"POST",headers:{"content-type":"application/json","authorization":"Bearer "+operatorToken},body:JSON.stringify({message:q,history:history.slice(-6)}),signal:ctrl.signal});clearTimeout(id);if(!r.ok){if(r.status===401)operatorToken="";throw Error("Servidor indisponível ou acesso negado");}const j=await r.json();if(typeof j.answer!=="string"||!j.answer.trim())throw Error("Resposta inválida");show(q,j.answer,j.source||"servidor autorizado");setStatus("Resposta recebida");if($("autoSpeak").checked)speak(j.answer);return}catch(e){show(q,"Não foi possível consultar o servidor. Nenhuma resposta foi inventada. Você pode desativar o modo conversacional e usar a base local.","erro de conexão");setStatus("Falha no servidor");return}}const [a,src]=local(q);show(q,a,src);setStatus("Resposta da base local");if($("autoSpeak").checked)speak(a)}
+$("send").onclick=()=>answer($("question").value);$("read").onclick=()=>speak(last||$("answer").textContent);$("intro").onclick=()=>{if(!playApproved()){speak($("introScript").value);$("avatarTranscript").textContent=$("introScript").value;}};$("next").onclick=()=>{const t=topics[idx++%topics.length];$("question").value=t[1];answer(t[1]);speak(t[2])};$("stop").onclick=()=>{speechSynthesis.cancel();resetVideoIfAnswer();$("portrait").classList.remove("speaking")};$("clear").onclick=()=>{history.length=0;$("log").replaceChildren();setStatus("Histórico desta sessão apagado")};$("image").onchange=e=>{const f=e.target.files[0];if(!f)return;if(!["image/png","image/jpeg","image/webp"].includes(f.type)||f.size>12e6){setStatus("Use PNG, JPG ou WEBP de até 12 MB.");return}if(imageURL)URL.revokeObjectURL(imageURL);imageURL=URL.createObjectURL(f);const im=document.getElementById('avatarPhoto')||document.createElement('img');im.id='avatarPhoto';im.src=imageURL;im.hidden=false;im.alt='Fotografia autorizada do proponente';document.getElementById('photoFail').hidden=true; if(!im.isConnected)$("portrait").prepend(im);setStatus('Fotografia local carregada com sucesso.')};$("mic").onclick=()=>{const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){setStatus("Microfone não disponível. Use texto.");return}if(!confirm("Autoriza o reconhecimento de fala do navegador? O fornecedor poderá processar sua voz externamente."))return;const rec=new SR();rec.lang=$("language").value;rec.onresult=e=>{$("question").value=e.results[0][0].transcript;answer($("question").value)};rec.onerror=e=>setStatus("Erro no microfone: "+e.error);rec.start();setStatus("Aguardando pergunta...")};$("export").onclick=()=>{const t=history.map(x=>"PERGUNTA: "+x.q+"\nRESPOSTA: "+x.a).join("\n\n");const u=URL.createObjectURL(new Blob([t],{type:"text/plain;charset=utf-8"}));const a=document.createElement("a");a.href=u;a.download="nexus-persona-historico.txt";a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)};
+
+let clipURL=null, audioURL=null, capsURL=null;const vid=$("approvedVideo"),aud=$("approvedAudio"); 
+function resetVideoIfAnswer(){if(!vid.paused)vid.pause();if(!aud.paused)aud.pause();}
+function playApproved(){
+ const hasVideo=!!clipURL,hasAudio=!!audioURL;
+ if(hasVideo){speechSynthesis?.cancel?.();aud.pause();vid.currentTime=0;vid.play().catch(e=>setStatus("O navegador bloqueou a reprodução. Pressione Play no próprio vídeo."));$("avatarTranscript").textContent=$("introScript").value;$("mediaState").textContent="Clipe audiovisual aprovado: reprodução independente (áudio e imagem do mesmo arquivo).";return true}
+ if(hasAudio){speechSynthesis?.cancel?.();vid.pause();aud.currentTime=0;aud.play().catch(e=>setStatus("Pressione Play no controle de áudio."));$("avatarTranscript").textContent=$("introScript").value;setStatus("Áudio aprovado; imagem estática, sem sincronização labial.");return true}
+ return false;
+}
+$("clip").addEventListener("change",e=>{
+ const f=e.target.files[0];if(!f)return;
+ if(!["video/mp4","video/webm"].includes(f.type)||f.size>400*1024*1024){setStatus("Use MP4 ou WEBM de até 400 MB.");return}
+ if(clipURL)URL.revokeObjectURL(clipURL);clipURL=URL.createObjectURL(f);
+ vid.pause();vid.src=clipURL;vid.load();$("mediaStage").classList.add("ready");$("mediaState").textContent=f.name+" — pronto para revisão audiovisual.";setStatus("Clipe carregado localmente. Verifique sincronização e identidade antes de apresentar.");
+});
+$("introAudio").addEventListener("change",e=>{
+ const f=e.target.files[0];if(!f)return;
+ if(f.size>100*1024*1024){setStatus("O áudio ultrapassa 100 MB.");return}
+ if(audioURL)URL.revokeObjectURL(audioURL);audioURL=URL.createObjectURL(f);aud.pause();aud.src=audioURL;aud.load();setStatus("Áudio aprovado carregado localmente.");
+});
+$("captions").addEventListener("change",e=>{
+ const f=e.target.files[0];if(!f)return;if(f.size>1e6||(!f.name.toLowerCase().endsWith(".vtt"))){setStatus("Selecione um arquivo .vtt válido de até 1 MB.");return}
+ if(capsURL)URL.revokeObjectURL(capsURL);capsURL=URL.createObjectURL(f);
+ vid.querySelectorAll("track").forEach(t=>t.remove());const track=document.createElement("track");track.kind="subtitles";track.label="Legendas revisadas";track.srclang="pt-BR";track.src=capsURL;track.default=true;vid.append(track);setStatus("Legendas carregadas e associadas ao vídeo. Ative CC no player se necessário.");
+});
+$("previewAV").onclick=()=>{if(!playApproved())setStatus("Carregue um clipe MP4/WEBM ou áudio aprovado antes de reproduzir.")};
+$("pauseAV").onclick=()=>{vid.pause();aud.pause();speechSynthesis?.cancel?.();setStatus("Reprodução pausada.")};
+$("fullAV").onclick=()=>{const el=clipURL?vid:$("mediaStage");if(el.requestFullscreen)el.requestFullscreen().catch(()=>setStatus("Tela cheia indisponível neste navegador."))};
+$("contrast").onclick=()=>document.body.classList.toggle("high-contrast");
+vid.onplay=()=>setStatus("Reproduzindo vídeo autorizado.");vid.onended=()=>setStatus("Clipe concluído. Agora a plateia pode fazer perguntas.");
+aud.onplay=()=>setStatus("Reproduzindo áudio autorizado — imagem estática.");aud.onended=()=>setStatus("Áudio concluído.");
+$("introScript").addEventListener("input",()=>{$("avatarTranscript").textContent=$("introScript").value});
+
+// Fase 4: foto automática e circuito de respostas sonoras (consentimento por clique).
+const OFFICIAL_PHOTO="https://cdn.creativeclaw.co/u/5dd90fe8/images/1d6c7262-d831-4938-8dba-fee75fd88dae.png";
+$("photoReset").addEventListener("click",()=>{
+if(imageURL){URL.revokeObjectURL(imageURL);imageURL=null}
+const im=document.getElementById("avatarPhoto");
+im.src=OFFICIAL_PHOTO;im.hidden=false;
+document.getElementById("photoFail").hidden=true;
+setStatus("Fotografia institucional restaurada.");
+});
+$("askLive").addEventListener("click",()=>{
+const Rec=window.SpeechRecognition||window.webkitSpeechRecognition;
+if(!Rec){setStatus("Reconhecimento de voz indisponível neste navegador. Digite uma pergunta.");$("question").focus();return}
+if(!confirm("Autoriza o navegador a reconhecer sua pergunta? Seu fornecedor pode processar o áudio externamente."))return;
+const r=new Rec();r.lang=$("language").value||"pt-BR";r.interimResults=false;r.maxAlternatives=1;
+r.onstart=()=>setStatus("Ouvindo o público...");
+r.onerror=e=>setStatus("Não foi possível usar o microfone: "+e.error);
+r.onresult=async e=>{const q=e.results[0][0].transcript;$("question").value=q;await answer(q)};
+r.start();
+});
+
+const LIBRARY_CLIPS=["https://cdn.creativeclaw.co/u/5dd90fe8/videos/0228548f-b112-414c-9815-7cbff820e3ce.mp4","https://cdn.creativeclaw.co/u/5dd90fe8/videos/11cead6e-fce2-4fe3-a730-552bcea8d253.mp4"];
+let playlistMode=false,playingClip=-1,filmQAReviewed=false;
+$("approvedVideo").setAttribute("playsinline","");
+$("approvedVideo").setAttribute("preload","metadata");
+$("filmVolume").addEventListener("input",()=>{$("approvedVideo").volume=Number($("filmVolume").value)});
+function filmStatus(message){$("filmStatus").textContent=message}
+function loadLibraryFilm(n,auto){
+ if(n<0||n>=LIBRARY_CLIPS.length)return;
+ playingClip=n;vid.pause();aud.pause();speechSynthesis?.cancel?.();
+ clipURL=LIBRARY_CLIPS[n];
+ vid.src=clipURL;vid.load();vid.volume=Number($("filmVolume").value);
+ $("mediaStage").classList.add("ready");
+ $("mediaState").textContent="Filme "+(n+1)+" — vídeo e áudio originais enviados ao projeto.";
+ filmStatus("Preparando filme "+(n+1)+".");
+ $("avatarTranscript").textContent="Filme "+(n+1)+" — transcrição ainda não conferida. Durante a reprodução prevalece o áudio original.";
+ if(auto) {
+  vid.play().then(()=>filmStatus("Reproduzindo filme "+(n+1)+" com o áudio original."))
+            .catch(()=>filmStatus("Reprodução automática impedida: pressione Play no vídeo para continuar."));
+ }
+}
+$("play1").onclick=()=>{playlistMode=false;loadLibraryFilm(0,true)};
+$("play2").onclick=()=>{playlistMode=false;loadLibraryFilm(1,true)};
+$("playSeries").onclick=()=>{playlistMode=true;loadLibraryFilm(0,true)};
+$("exitFilms").onclick=()=>{playlistMode=false;vid.pause();$("mediaStage").classList.remove("ready");filmStatus("Apresentação encerrada. Pronto para perguntas por texto ou microfone.")};
+vid.onended=()=>{
+ if(playlistMode&&playingClip===0){loadLibraryFilm(1,true)}
+ else {playlistMode=false;filmStatus("Vídeos concluídos. Iniciando interação com o público.");setStatus("Pode perguntar ao NEXUS PERSONA.");}
+};
+vid.onerror=()=>filmStatus("Não foi possível carregar o vídeo. Verifique a conexão ou carregue o arquivo pelo seletor local.");
+for(const [id,fraction] of [["seek25",.25],["seek50",.5],["seek75",.75]]){
+ $(id).onclick=()=>{if(!Number.isFinite(vid.duration)||vid.duration===0){filmStatus("Espere o vídeo carregar primeiro.");return}vid.pause();vid.currentTime=vid.duration*fraction;filmStatus("Ponto de inspeção: "+Math.round(fraction*100)+"% do filme "+(playingClip+1)+".");}
+}
+$("review").addEventListener("change",()=>{
+ const checks=[...$("review").querySelectorAll('input[type="checkbox"]')];
+ $("qaStatus").textContent=checks.every(c=>c.checked)?
+ "O operador marcou todos os critérios. Essa declaração requer inspeção humana e não equivale a validação automatizada.":
+ "Revisão humana incompleta; não declarar sincronização labial validada.";
+});
+const previousStop=$("stop").onclick;
+$("stop").onclick=()=>{playlistMode=false;previousStop();filmStatus("Reprodução interrompida.")};
+
+const realFilm2=$("presenceVideo"),storedGestures=[];let selectionStart=null,selectionEnd=null;
+function presenceStatus(t){$("presenceState").textContent=t}
+function stopOtherPlayback(){vid.pause();aud.pause();if(window.speechSynthesis)window.speechSynthesis.cancel()}
+$("presenceStart").addEventListener("click",()=>{
+ stopOtherPlayback();playlistMode=false;
+ realFilm2.play().then(()=>presenceStatus("Apresentação com áudio e movimentos ORIGINAIS do Filme 2."))
+ .catch(()=>presenceStatus("Pressione Play no próprio vídeo; o navegador impediu a reprodução automática."));
+});
+$("presencePause").addEventListener("click",()=>{realFilm2.pause();presenceStatus("Filme 2 pausado.")});
+for(const id of ["play1","play2","playSeries","previewAV"]){const elem=$(id);if(elem){elem.addEventListener("click",()=>realFilm2.pause(),{capture:true})}}
+
+$("presenceAsk").addEventListener("click",()=>{
+ realFilm2.pause();$("question").focus();
+ presenceStatus("Perguntas abertas. As respostas novas usam a base institucional e a voz de navegador, NÃO fingem ter a voz clonada.");
+});
+const priorAnswer=answer;
+answer=async function(q){realFilm2.pause();return priorAnswer(q)};
+$("markStart").onclick=()=>{selectionStart=realFilm2.currentTime;selectionEnd=null;$("gestureTime").textContent="Início: "+selectionStart.toFixed(2)+"s | Fim: —"};
+$("markEnd").onclick=()=>{selectionEnd=realFilm2.currentTime;$("gestureTime").textContent="Início: "+(selectionStart==null?"—":selectionStart.toFixed(2)+"s")+" | Fim: "+selectionEnd.toFixed(2)+"s"};
+$("saveGesture").onclick=()=>{
+ if(selectionStart==null||selectionEnd==null||selectionEnd<=selectionStart){
+ presenceStatus("Marque primeiro um início e um fim em ordem crescente.");return;
+ }
+ const item={source:"Filme 2 — arquivo original",type:$("gestureType").value,start:Number(selectionStart.toFixed(3)),end:Number(selectionEnd.toFixed(3)),reviewed:false};
+ storedGestures.push(item);
+ const b=document.createElement("button");b.type="button";b.textContent=item.type+": "+item.start.toFixed(1)+"–"+item.end.toFixed(1)+"s";
+ b.onclick=()=>{realFilm2.currentTime=item.start;realFilm2.play().catch(()=>{});};
+ $("gestureList").append(b);presenceStatus("Trecho salvo na sessão para revisão humana.");
+};
+$("exportGestures").onclick=()=>{
+ const data={project:"NEXUS PERSONA",purpose:"marcacoes manuais para referencia facial 3D",status:"NAO_VALIDADAS",source:"2Conhecimento Deve Circular.mp4",clips:storedGestures};
+ const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}));
+ const a=document.createElement("a");a.href=url;a.download="NEXUS_FILME_2_TREJEITOS_MARCADOS.json";a.click();
+ setTimeout(()=>URL.revokeObjectURL(url),1500);
+};
+realFilm2.onended=()=>presenceStatus("Filme concluído. Pressione 'Abrir perguntas' para interagir com o público.");
+realFilm2.addEventListener("loadedmetadata",()=>presenceStatus("Filme 2 carregado: "+Math.round(realFilm2.duration)+" segundos. Inspecione a gravação antes de definir trejeitos."));
+
+realFilm2.onerror=()=>presenceStatus("Falha no carregamento do Filme 2: verifique conexão e endereço da mídia.");
+const origStop=$("stop").onclick;
+$("stop").onclick=()=>{realFilm2.pause();origStop();presenceStatus("Reprodução interrompida.")};
+</script></body></html>
