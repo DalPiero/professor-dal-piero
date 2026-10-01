@@ -83,7 +83,8 @@ function renderSuggestions(){
  for(const topic of NEXUS_KB.topics){
    if(!["brasil","papel","piloto","nexus","edu","med","odonto","universal","etica","autonomia","avatar","voz"].includes(topic.id))continue;
    const b=document.createElement("button");b.type="button";b.textContent=topic.title;
-   b.addEventListener("click",()=>{$("q").value=topic.title;ask(topic.title)});
+   const prompts={brasil:"O que é BRASIL 2075?",papel:"Qual é o papel da universidade?",piloto:"Como funciona o piloto de 90 dias?",nexus:"Quais são os núcleos NEXUS?",edu:"O que é NEXUS EDU?",med:"O que é NEXUS MED?",odonto:"O que é NEXUS ODONTO?",universal:"O que é NEXUS UNIVERSAL?",etica:"Quais são os limites éticos e de privacidade?",autonomia:"A IA vai substituir os professores?",avatar:"Quem é você?",voz:"A voz é do autor?"};
+   b.addEventListener("click",()=>{const q=prompts[topic.id]||topic.title;$("q").value=q;ask(q)});
    area.appendChild(b);
  }
 }
