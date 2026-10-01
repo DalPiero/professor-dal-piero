@@ -30,7 +30,7 @@ MODEL=gpt-4.1-mini
 node server.mjs
 ```
 
-**Antes de integrar:** o HTML atual envia perguntas sem token e, por desenho, um servidor autenticado rejeitará essas chamadas. Para uso real com público é obrigatório acrescentar **sessões autenticadas emitidas por backend, com cookies HttpOnly e proteção antiabuso**, ou um proxy autenticado equivalente. NÃO inclua um token fixo no HTML. O servidor é uma base técnica de referência, não um endpoint público pronto. Há limites de requisições por IP, CORS e de tamanho de entrada; adicione monitoramento, política de retenção, testes de segurança e revisão do conteúdo antes de disponibilizar.
+**Integração privada de demonstração:** após configurar um endpoint HTTPS e marcar o modo conversacional, a interface solicita ao operador o ACCESS_TOKEN temporário, mantido apenas na memória daquela aba; não é armazenado no HTML nem em armazenamento persistente. Essa opção é apropriada SOMENTE para teste privado por operador confiável: quem tem acesso ao navegador ou à rede dessa sessão poderá recuperar o token. **Para quiosques públicos e plateias usando dispositivos próprios, substitua-a por sessões autenticadas emitidas por backend (por exemplo, cookies HttpOnly com proteção CSRF, quotas por sessão e antiabuso).** Nunca publique um token global ou uma chave da API no front-end. O servidor é uma base técnica de referência, não um endpoint público pronto. Há limites de requisições por IP, CORS e de tamanho de entrada; adicione monitoramento, política de retenção, testes de segurança e revisão do conteúdo antes de disponibilizar.
 
 ## 4. Voz, animação e tradução
 - A voz no protótipo vem do navegador, não é a voz autêntica do autor.
