@@ -19,6 +19,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y blender xvfb
+      - name: Validate Blender build script syntax
+        run: python3 -m py_compile nexus-persona-v5/build_persona.py
       - name: Build model, blend and glb
         run: |
           mkdir -p output
