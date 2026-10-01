@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEXUS PERSONA — Protótipo Universitário</title>
+<style>
+:root{--navy:#081b31;--light:#f4f7fb;--gold:#d8b979;--ink:#1e354a}*{box-sizing:border-box}
+body{margin:0;background:var(--light);font:17px/1.5 system-ui,Segoe UI,sans-serif;color:var(--ink)}
+header{background:var(--navy);color:white;padding:24px max(22px,calc((100vw - 1180px)/2));border-bottom:5px solid var(--gold)}
+header h1{font:600 clamp(24px,4vw,40px)/1.15 Georgia,serif;margin:0}header p{margin:8px 0 0;color:#e2cfaa}
+main{max-width:1200px;margin:24px auto;padding:0 16px;display:grid;grid-template-columns:minmax(290px,430px) 1fr;gap:22px}
+section{background:white;border:1px solid #dde5eb;border-radius:18px;padding:22px;box-shadow:0 3px 20px #09243c0d}
+.portrait{position:relative;border-radius:14px;overflow:hidden;aspect-ratio:4/3;background:linear-gradient(145deg,#182b40,#49667b);display:grid;place-items:center;color:white}
+.portrait img{width:100%;height:100%;object-fit:contain}.portrait .default{font:110px Georgia,serif;letter-spacing:-10px}
+.portrait.speaking{box-shadow:0 0 0 5px #d8b979}.portrait.speaking:after{content:"ÁUDIO ATIVO";position:absolute;bottom:12px;right:12px;background:#132a42ed;padding:3px 10px;border-radius:8px;font-size:13px}
+.small{color:#637587;font-size:14px}.small.light{color:#d1dce8}
+button,.pick{border:0;border-radius:10px;padding:10px 15px;font:inherit;cursor:pointer;background:#164a72;color:white}
+button.secondary,.pick{background:#edf2f5;color:#183248;border:1px solid #c9d7e0}
+button:disabled{opacity:.5;cursor:not-allowed}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.questions{display:flex;gap:7px;flex-wrap:wrap;margin:15px 0}
+.questions button{font-size:14px;background:#e8eff6;color:#193852}
+label{font-weight:650;display:block;margin:8px 0}textarea{width:100%;min-height:100px;font:inherit;padding:12px;border:1px solid #a7bdcd;border-radius:11px}
+.answer{white-space:pre-wrap;background:#f1f5f8;border-left:4px solid #c1a063;border-radius:8px;padding:16px;min-height:125px;margin:14px 0}
+.status{font-weight:650;color:#20644e;margin:8px 0}.caution{background:#fff6df;border-radius:10px;padding:12px;font-size:14px}
+a{color:#07578b}@media(max-width:780px){main{grid-template-columns:1fr}}
+</style></head><body>
+<header><h1>NEXUS PERSONA</h1><p>DAL PIERO NEXUS 2075 · Conhecimento, Gravitas e Liberdade de Escolher</p></header>
+<main>
+<section aria-label="Representação digital institucional">
+<div id="portrait" class="portrait" aria-label="Área da fotografia autorizada"><div class="default" aria-hidden="true">N</div></div>
+<p><strong>Apresentador digital — protótipo</strong></p>
+<p class="small">Carregue localmente a fotografia autorizada. Este protótipo não gera nem modifica rostos; utiliza a própria foto, sem envio ao servidor do projeto.</p>
+<label for="photo" class="pick">Selecionar fotografia autorizada</label><input id="photo" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+<div class="controls">
+<button id="intro">▶ Apresentação</button><button id="stop" class="secondary">■ Parar voz</button>
+</div>
+<p class="status" id="status" role="status" aria-live="polite">Pronto para apresentar.</p>
+<p class="small">Voz: síntese fornecida pelo navegador, não reprodução da voz real do proponente. A fotografia é estática: não há lip sync nesta etapa.</p>
+</section>
+<section aria-label="Interação com o público">
+<h2 style="margin-top:0">Pergunte ao NEXUS</h2>
+<p>Faça perguntas sobre a proposta BRASIL 2075. Se a base institucional não sustentar uma resposta, o protótipo informa essa limitação.</p>
+<div class="questions" id="suggestions"></div>
+<label for="question">Pergunta do público</label>
+<textarea id="question" placeholder="Ex.: O que é o NEXUS EDU?"></textarea>
+<div class="controls">
+<button id="ask">Responder</button><button id="mic" class="secondary">🎤 Microfone</button><button id="read" class="secondary">🔊 Ler resposta</button>
+</div>
+<div id="answer" class="answer" role="region" aria-label="Resposta do NEXUS" aria-live="polite">Bem-vindos. Selecione uma pergunta ou escreva a sua.</div>
+<div class="caution"><strong>Demonstração supervisionada.</strong> As respostas são recuperadas de uma base local resumida do projeto e não constituem aconselhamento profissional. Não há consulta livre à internet nem aprendizagem autônoma. Dependendo do navegador, o reconhecimento de fala pode enviar áudio ao serviço do fornecedor; solicite consentimento antes de ativar o microfone.</div>
+<p class="small">Referências institucionais: <a href="https://orcid.org/0009-0008-1451-149X" target="_blank" rel="noopener">ORCID</a> · <a href="https://dalpiero.github.io/professor-dal-piero/" target="_blank" rel="noopener">Página do proponente</a></p>
+</section></main>
+<script>
+"use strict";
+const db=[
+{q:"O que é o BRASIL 2075?",keys:["brasil 2075","programa 2075","que e o projeto","horizonte"],a:"BRASIL 2075 é uma proposta universitária de investigação sobre colaboração entre inteligência humana e artificial. O ano 2075 define um horizonte prospectivo: não é previsão nem promessa de que uma tecnologia será alcançada."},
+{q:"Quem é o NEXUS PERSONA?",keys:["quem e voce","quem e persona","nexus persona","quem e o avatar","avatar"],a:"Sou o NEXUS PERSONA, um protótipo de apresentador digital do programa DAL PIERO NEXUS 2075. Esta versão usa perguntas e respostas locais, uma foto autorizada e voz sintética do navegador. Não sou o Professor Dal Piero nem possuo sentimentos ou consciência."},
+{q:"Como as universidades podem participar?",keys:["universidade","participar","parceria","instituicao","projeto piloto","piloto"],a:"O documento propõe um projeto-piloto universitário de 90 dias: dias 1 a 15, objetivos e recursos; 16 a 30, metodologia e avaliação; 31 a 60, atividades autorizadas; 61 a 90, análise e relatório. Cada instituição decide autonomamente se deseja participar."},
+{q:"O que é NEXUS EDU?",keys:["nexus edu","educacao","educacional","aprender","ensino"],a:"NEXUS EDU é a frente de investigação sobre educação inteligente e aprendizagem por desafios. A proposta prevê avaliar tecnologias de apoio à aprendizagem em ambientes universitários existentes."},
+{q:"O que são NEXUS MED e ODONTO?",keys:["nexus med","nexus odonto","odontologia","medicina","saude"],a:"NEXUS MED propõe investigar pacientes virtuais e educação em saúde. NEXUS ODONTO estuda representações anatômicas e formação odontológica. São propostas de formação e pesquisa, não sistemas autorizados a substituir profissionais de saúde."},
+{q:"Quais são os núcleos NEXUS?",keys:["nucleos","mind","memory","core","universal","areas do nexus"],a:"Os núcleos previstos são EDU, MED, ODONTO, MIND, MEMORY, CORE e UNIVERSAL. Respectivamente abrangem aprendizagem, formação médica, formação odontológica, cognição e interação, memória e acervos, infraestrutura tecnológica, e mediação linguística."},
+{q:"A IA substituirá professores e pesquisadores?",keys:["substituir","professor","pesquisador","decisao humana","autonomia","responsabilidade"],a:"O projeto não propõe adesão automática nem substituição do julgamento humano. Defende avaliação de resultados, supervisão, autonomia institucional e responsabilidade humana pelo uso das ferramentas."},
+{q:"Como ficam ética e privacidade?",keys:["etica","privacidade","consentimento","seguranca","dados","risco"],a:"O NEXUS deve adotar autorização para imagem e voz, seleção de conteúdo, limites claros, supervisão e avaliação de segurança, acessibilidade e privacidade. O protótipo não grava uma memória permanente das perguntas."},
+{q:"Como será a infraestrutura?",keys:["infraestrutura","sala","equipamentos","computador","2054"],a:"A proposta começa em salas universitárias convencionais, com computadores, telas, microfones, câmeras e acessibilidade. A expansão até 2054 é um marco de planejamento sujeito a resultados e recursos, não uma garantia."},
+{q:"O que significam os três níveis de integração?",keys:["tres niveis","integracao","neurotecnologia","neuro","cognitiva"],a:"O projeto distingue integração funcional por ferramentas digitais, integração assistiva ou neurotecnológica sujeita a validação e integração cognitiva profunda como hipótese de longo prazo. Esta última não é resultado comprovado."}
+];
+const $=id=>document.getElementById(id);let last="";let photoURL=null;const norm=s=>s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
+db.forEach(it=>{const b=document.createElement("button");b.textContent=it.q;b.addEventListener("click",()=>{$("question").value=it.q;respond(it.q)});$("suggestions").appendChild(b)});
+function respond(raw){const n=norm(raw);if(!n){$("answer").textContent="Digite ou dite uma pergunta.";return}let best=null,top=0;for(const it of db){let score=0;for(const phrase of it.keys){const p=norm(phrase);if(n.includes(p))score+=p.split(" ").length+2;else {const words=p.split(" ").filter(w=>w.length>4);score+=words.filter(w=>n.split(" ").includes(w)).length}}if(score>top){top=score;best=it}}last=top>=2?best.a:"Não encontrei informação suficiente nesta base institucional para responder com segurança. A pergunta deve ser encaminhada ao responsável pelo programa ou à documentação técnica."; $("answer").textContent=last;$("status").textContent=top>=2?"Resposta da base institucional.":"Informação não disponível na base."; }
+function speak(t){if(!("speechSynthesis"in window)){$("status").textContent="Síntese de voz não disponível neste navegador.";return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="pt-BR";u.rate=.92;u.pitch=.92;const voices=speechSynthesis.getVoices();u.voice=voices.find(v=>v.lang.toLowerCase().startsWith("pt-br"))||voices.find(v=>v.lang.startsWith("pt"))||null;u.onstart=()=>{$("portrait").classList.add("speaking");$("status").textContent="Voz sintética ativa.";};u.onend=u.onerror=()=>{$("portrait").classList.remove("speaking");$("status").textContent="Pronto para a próxima pergunta.";};speechSynthesis.speak(u);}
+$("ask").addEventListener("click",()=>respond($("question").value));$("read").addEventListener("click",()=>speak(last||$("answer").textContent));
+$("intro").addEventListener("click",()=>speak("Sejam bem-vindos. Eu sou NEXUS PERSONA, protótipo de apresentador digital do programa DAL PIERO NEXUS 2075. Nosso objetivo é investigar como inteligência humana e inteligência artificial podem colaborar sob supervisão e avaliação científica. Escolham uma pergunta para começar."));
+$("stop").addEventListener("click",()=>{speechSynthesis?.cancel?.();$("portrait").classList.remove("speaking")});
+$("photo").addEventListener("change",e=>{const file=e.target.files[0];if(!file)return;if(!["image/png","image/jpeg","image/webp"].includes(file.type)||file.size>12*1024*1024){alert("Selecione PNG, JPG ou WEBP de até 12 MB.");return}if(photoURL)URL.revokeObjectURL(photoURL);photoURL=URL.createObjectURL(file);const im=document.createElement("img");im.src=photoURL;im.alt="Fotografia autorizada do proponente";$("portrait").replaceChildren(im)});
+$("mic").addEventListener("click",()=>{const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){$("status").textContent="Microfone por reconhecimento de fala não disponível neste navegador. Use a caixa de texto.";return}if(!confirm("Autoriza o reconhecimento de fala do seu navegador? Conforme o fornecedor, o áudio pode ser processado por um serviço externo."))return;const r=new SR();r.lang="pt-BR";r.interimResults=false;r.maxAlternatives=1;r.onstart=()=>{$("status").textContent="Ouvindo pergunta..."};r.onresult=e=>{const text=e.results[0][0].transcript;$("question").value=text;respond(text)};r.onerror=e=>{$("status").textContent="Falha no reconhecimento: "+e.error};r.onend=()=>{if($("status").textContent==="Ouvindo pergunta...")$("status").textContent="Pronto."};try{r.start()}catch(e){$("status").textContent="Não foi possível abrir o microfone."}});
+</script></body></html>
