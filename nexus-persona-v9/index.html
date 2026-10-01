@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEXUS PERSONA V9 — Filme 2 e voz oficial</title>
+<style>
+:root{color-scheme:dark;--bg:#07182b;--card:#102e48;--accent:#e1bf7f;--text:#edf4fb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--text);background:linear-gradient(140deg,#071827,#15334c);font:16px/1.55 system-ui,Segoe UI,Arial}
+header,main,footer{max-width:1300px;margin:auto;padding:18px 22px}header{border-bottom:3px solid var(--accent)}h1{color:var(--accent);font:600 clamp(26px,4vw,43px) Georgia,serif;margin:0}h2{margin-top:0;font:600 25px Georgia,serif}h3{color:var(--accent);margin-bottom:7px}
+main{display:grid;grid-template-columns:minmax(320px,550px) 1fr;gap:18px}.panel{border:1px solid #45657b;border-radius:14px;background:var(--card);padding:18px}.film{background:black;border-radius:12px;overflow:hidden;border:2px solid #b79860}
+.film video{display:block;width:100%;aspect-ratio:16/9;object-fit:contain;background:#000;max-height:450px}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:13px 0}button{background:#315674;border:1px solid #9ab1c1;color:white;font:inherit;border-radius:9px;cursor:pointer;padding:9px 12px}button:hover,button:focus-visible{background:#467294;outline-offset:3px}button.primary{background:#99763f;color:#fff}button[disabled]{opacity:.45;cursor:not-allowed}
+input,textarea,select{font:inherit;border:1px solid #94a9b8;border-radius:8px;padding:10px;background:#f8fafb;color:#102538}
+input[type=checkbox]{width:17px;height:17px;vertical-align:middle}textarea{width:100%;min-height:108px}
+label{display:block;margin-top:12px;font-weight:600}
+.small{font-size:.89rem;color:#d0dfeb}.source{border-left:3px solid var(--accent);padding:10px;background:#0b2236;white-space:pre-wrap}
+#answer{min-height:110px;border-left:4px solid var(--accent);padding:15px;background:#0a2336;border-radius:8px;white-space:pre-wrap}
+#status{color:#ffe2a4;min-height:28px}.grid{display:flex;flex-wrap:wrap;gap:8px}.grid button{font-size:.87rem}
+audio{width:100%;margin:10px 0}.separator{border:0;border-top:1px solid #5c7383;margin:18px 0}
+details{margin-top:12px;border:1px solid #4c6c86;padding:10px;border-radius:9px}summary{cursor:pointer;font-weight:bold}
+#session{max-height:200px;overflow:auto}#session p{border-bottom:1px solid #3d5b6f;padding-bottom:8px}
+a{color:#f8d99b}@media(max-width:900px){main{grid-template-columns:1fr}}
+#avatarStage{transition:transform .9s ease;transform-origin:center center}#avatarStage.talking{animation:cameraPresence 5s ease-in-out infinite alternate;box-shadow:0 0 0 3px #dcba81}#avatarStage.talking video{filter:brightness(1.025)}@keyframes cameraPresence{from{transform:scale(1) translateY(0)}to{transform:scale(1.012) translateY(-1px)}}#rigStage{height:350px;border:1px solid #bc995d;border-radius:12px;overflow:hidden;background:#07182c;max-width:100%;margin-top:10px}#rigCanvas{display:block;width:100%;height:100%}#liveSignal{padding:10px;background:#192d3c;border:1px solid #617588;border-radius:8px;margin:10px 0}#liveSignal.on{background:#30503e;border-color:#83c19e}@media(prefers-reduced-motion:reduce){#avatarStage.talking{animation:none}}</style><script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.163.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.163.0/examples/jsm/"}}</script></head><body>
+<header><div style="letter-spacing:.18em;color:#c8d9e4;font-size:.84rem">DAL PIERO NEXUS 2075</div><h1>NEXUS PERSONA — AUDIÊNCIA AO VIVO</h1><p>Avatar audiovisual baseado exclusivamente na gravação selecionada e na amostra de voz autorizada.</p></header>
+<main>
+<section class="panel" aria-label="Presença audiovisual do avatar">
+<h2>Presença do autor</h2>
+<p>A imagem e os movimentos abaixo vêm somente do <strong>Filme 2 — Conhecimento Deve Circular</strong>. Nenhuma fotografia ou outro filme é utilizado nesta versão.</p>
+<div class="film" id="avatarStage"><video id="avatarVideo" controls playsinline preload="metadata" aria-label="Filme 2 original do autor, única fonte visual do NEXUS PERSONA" src="https://cdn.creativeclaw.co/u/5dd90fe8/videos/11cead6e-fce2-4fe3-a730-552bcea8d253.mp4"></video></div>
+<div class="controls"><button id="present" class="primary">▶ Apresentar com Filme 2</button><button id="pauseVideo">⏸ Pausar imagem</button><button id="questionMode">🎙️ Abrir perguntas</button><button id="fullscreen">⛶ Tela cheia</button></div>
+<p class="small" id="filmStatus">Aguardando apresentação. A imagem pausada mantém o último quadro REAL do vídeo.</p>
+<details><summary>Malha facial 3D revisada — movimento durante respostas</summary>
+<p class="small">O Filme 2 continua sendo a única referência de identidade. Carregue somente a malha Blender previamente aprovada contra esse filme. Sem malha aprovada, o avatar usa movimento editorial discreto da imagem real, sem simular fala labial.</p>
+<label for="rigFile">Importar malha facial autorizada (.GLB)</label>
+<input id="rigFile" type="file" accept=".glb,model/gltf-binary">
+<div id="rigStage" hidden><canvas id="rigCanvas" aria-label="Prévia tridimensional opcional com controle de expressões"></canvas></div>
+<p id="rigStatus" class="small">Nenhuma malha 3D aprovada carregada. A imagem oficial permanece a do Filme 2.</p>
+<p class="small">As categorias de boca seguem aproximadamente os tempos de caracteres recebidos do servidor: não representam uma validação fonética nem garantem sincronização facial perfeita.</p>
+</details><hr class="separator">
+<h3>Voz oficial: amostra enviada</h3>
+<audio id="voiceReference" controls preload="metadata" src="https://cdn.creativeclaw.co/u/5dd90fe8/audio/fb294ade-7ee7-4a26-8fce-1023ab38cffe.mp3"></audio>
+<p class="small">Este MP3 é uma referência de identidade vocal, não um gerador de novas frases. Respostas inéditas só terão essa voz quando o servidor autorizado estiver vinculado à voz oficial correspondente.</p>
+<div class="source" id="identityStatus" aria-live="polite">Identidade visual: Filme 2 original.<br>Identidade vocal: gravação original + amostra enviada.<br>Voz em respostas inéditas: não configurada.</div>
+<details><summary>Catalogar movimentos REAIS para a futura malha 3D</summary>
+<p class="small">Pause o Filme 2 no início e no final de cada expressão. Essa catalogação é manual; não altera o rosto nem cria automaticamente uma malha.</p>
+<label for="gesture">Trejeito observado</label><select id="gesture">
+<option value="head_turn">Virada ou inclinação da cabeça</option><option value="gaze">Direção do olhar</option>
+<option value="brows">Sobrancelhas</option><option value="blink">Piscada</option><option value="smile">Sorriso</option>
+<option value="mouth">Abertura/movimento da boca</option><option value="hands">Mãos ou postura</option><option value="pause">Pausa expressiva</option>
+</select>
+<div class="controls"><button id="startMark">Marcar início</button><button id="endMark">Marcar fim</button><button id="saveMark">Salvar trecho</button><button id="exportMarks">Exportar JSON</button></div>
+<div id="markStatus" class="small" role="status">Nenhum trecho marcado.</div><div id="markList" class="small"></div>
+</details>
+</section>
+<section class="panel" aria-label="Interação com a plateia">
+<h2>Converse com o público</h2>
+<p>Faça perguntas sobre o BRASIL 2075. O modo local usa respostas documentadas. Para perguntas livres na voz oficial, configure o servidor autorizado.</p>
+<div class="grid" id="suggestions"></div><label for="q">Pergunta da plateia</label><textarea id="q" placeholder="Ex.: Como uma universidade pode participar?"></textarea>
+<div class="controls"><button id="ask" class="primary">Responder</button><button id="mic">🎤 Perguntar uma vez</button><button id="startLive" class="primary">▶ Iniciar conversa</button><button id="stopLive">■ Encerrar conversa</button><button id="stopAudio">■ Parar fala</button></div><div id="liveSignal" aria-live="polite">Conversa contínua desativada. Ative com consentimento da plateia.</div>
+<div id="status" role="status" aria-live="polite">Pronto para perguntas.</div>
+<div id="answer" aria-live="polite">Bem-vindos ao NEXUS PERSONA. O filme original está disponível para apresentação.</div>
+<label><input id="browserVoice" type="checkbox"> Permitir voz PROVISÓRIA do navegador quando não houver voz oficial</label>
+<p class="small">A voz provisória nunca é apresentada como voz do autor. O MP3 enviado pode ser reproduzido para verificar a referência original.</p>
+<details><summary>Servidor privado para voz autorizada e perguntas inéditas</summary>
+<p class="small">Configure um endpoint HTTPS criado pelo responsável pelo projeto. A credencial da voz clonada permanece no servidor, nunca no HTML. Este teste por token temporário é reservado ao operador, não a quiosques públicos.</p>
+<label for="endpoint">Endpoint HTTPS</label><input id="endpoint" type="url" style="width:100%" placeholder="https://seu-servidor.exemplo/api/chat">
+<label><input id="remote" type="checkbox"> Habilitar integração privada</label>
+<div class="controls"><button id="disconnect">Desconectar / descartar token</button></div>
+<p class="small">A ativação poderá usar provedores com cobrança. Nenhuma geração paga acontece neste arquivo sem um servidor configurado e uma pergunta enviada.</p>
+</details>
+<details><summary>Histórico desta sessão e transparência</summary><div class="controls"><button id="exportSession">Exportar sessão (.txt)</button><button id="clearSession">Apagar sessão</button></div><div id="session"></div></details>
+<p class="small">O microfone depende da disponibilidade e da permissão no navegador. Reconhecimento de fala pode transmitir áudio ao fornecedor. O avatar é digital e não substitui o professor, a universidade ou decisões profissionais.</p>
+</section>
+</main><footer>Professor Doutor Fernando Antonio Dal Piero · NEXUS PERSONA · Protótipo audiovisual em desenvolvimento</footer>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const film=$("avatarVideo"),sample=$("voiceReference"),log=[],marks=[];let markA=null,markB=null,tempToken="",lastAnswer="",responseAudio=null,playbackURL=null;
+const QA=[
+["O que é BRASIL 2075?","BRASIL 2075 é uma agenda universitária prospectiva para investigar a colaboração entre inteligência humana e inteligência artificial. 2075 é horizonte de investigação, não previsão.",["brasil 2075","horizonte","projeto"]],
+["Qual é o papel da universidade?","A universidade pode formular problemas, conduzir pilotos autorizados, comparar resultados e decidir autonomamente sobre a continuidade.",["universidade","participar","piloto","parceria"]],
+["Quais são os núcleos NEXUS?","EDU, MED, ODONTO, MIND, MEMORY, CORE e UNIVERSAL abrangem educação, formação em saúde, cognição, memória, infraestrutura segura e mediação linguística.",["nexus","nucleos","edu","med","odonto","memory","universal"]],
+["Como é o piloto de 90 dias?","A proposta distribui os noventa dias entre definição de objetivos, preparação metodológica, atividades autorizadas e análise de resultados.",["90 dias","piloto","prazo"]],
+["A IA substituirá o julgamento humano?","Não é a finalidade do projeto. As ferramentas devem ser avaliadas sob responsabilidade, supervisão e autonomia humana.",["substituir","inteligencia humana","julgamento","professores","autonomia"]]
+];
+QA.forEach(item=>{const b=document.createElement("button");b.textContent=item[0];b.onclick=()=>{$("q").value=item[0];ask(item[0])};$("suggestions").append(b)});
+function note(s){$("status").textContent=s}
+function filmNote(s){$("filmStatus").textContent=s}
+function stopVoices(){if(window.speechSynthesis)speechSynthesis.cancel();if(responseAudio){responseAudio.pause();responseAudio=null}if(playbackURL){URL.revokeObjectURL(playbackURL);playbackURL=null}setMotion(false)}
+function askMode(){film.pause();sample.pause();note("Pronto para pergunta. O vídeo foi pausado no último quadro real.");$("q").focus()}
+$("present").onclick=()=>{stopVoices();sample.pause();film.currentTime=0;film.play().then(()=>filmNote("Apresentação original em reprodução.")).catch(()=>filmNote("Pressione Play no vídeo para iniciar."))};
+$("pauseVideo").onclick=()=>{film.pause();filmNote("Imagem pausada no quadro real do Filme 2.")};
+$("questionMode").onclick=askMode;
+$("fullscreen").onclick=()=>{if(film.requestFullscreen)film.requestFullscreen().catch(()=>filmNote("Tela cheia indisponível."))};
+film.onerror=()=>filmNote("Não foi possível carregar o Filme 2. Verifique a conexão.");
+sample.onplay=()=>{film.pause();stopVoices();$("identityStatus").textContent="Reproduzindo exclusivamente a amostra original de voz enviada. Não é síntese de frases inéditas."};
+film.onplay=()=>{sample.pause();stopVoices()};
+const normalize=s=>s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9 ]/g," ").trim();
+function local(q){const t=normalize(q);let best=null,n=0;for(const item of QA){const sc=item[2].reduce((acc,k)=>acc+(t.includes(normalize(k))?normalize(k).split(" ").length+2:0),0);if(sc>n){n=sc;best=item}}return best&&n>=2?best[1]:"Não tenho informação suficiente na base institucional resumida para responder com segurança. Consulte os documentos oficiais do projeto."}
+let live=false,rec=null,voiceActive=false,waitingForAnswer=false,requestSerial=0;
+function setMotion(active,alignment=null,player=null){
+ voiceActive=active;
+ $("avatarStage").classList.toggle("talking",active);
+ window.dispatchEvent(new CustomEvent("nexus-motion",{detail:{active,alignment,player}}));
+}
+function maybeListen(){
+ if(!live||voiceActive||waitingForAnswer||rec)return;
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SR){$("liveSignal").textContent="Este navegador não oferece reconhecimento de fala. Use perguntas digitadas.";live=false;return}
+ const recognition=new SR();recognition.lang="pt-BR";recognition.continuous=false;recognition.interimResults=false;
+ rec=recognition;
+ recognition.onstart=()=>{$("liveSignal").classList.add("on");$("liveSignal").textContent="Microfone ativo: ouvindo pergunta da plateia."};
+ recognition.onresult=e=>{
+ const text=e.results?.[0]?.[0]?.transcript||"";
+ $("q").value=text;
+ // Recognition stops before microphone playback of answer.
+ if(text){waitingForAnswer=true;ask(text);}
+ };
+ recognition.onerror=e=>{
+ rec=null;
+ if(e.error==="not-allowed"||e.error==="service-not-allowed"){live=false}
+ $("liveSignal").textContent="Reconhecimento interrompido: "+e.error+". Reinicie manualmente, se necessário.";
+ };
+ recognition.onend=()=>{
+ rec=null;$("liveSignal").classList.remove("on");
+ if(live&&!waitingForAnswer&&!voiceActive)maybeListen();
+ };
+ try{recognition.start()}catch(e){rec=null;live=false;note("Não foi possível abrir o microfone.")}
+}
+function finishAnswer(){
+ waitingForAnswer=false;
+ if(live&&!rec){
+   // Prevent TTS being recaptured by microphone.
+   setTimeout(()=>{if(live&&!voiceActive&&!waitingForAnswer)maybeListen()},700);
+ }
+}
+function playBrowser(text){
+ if(!window.speechSynthesis){note("Síntese de voz indisponível no navegador.");finishAnswer();return}
+ const utter=new SpeechSynthesisUtterance(text);utter.lang="pt-BR";utter.rate=.92;
+ utter.onstart=()=>{setMotion(true);$("identityStatus").textContent="Voz PROVISÓRIA do navegador — não representa a voz do autor."};
+ utter.onend=()=>{setMotion(false);finishAnswer()};
+ utter.onerror=()=>{setMotion(false);finishAnswer()};
+ speechSynthesis.speak(utter)
+}
+function playOfficial(base64,mime,alignment){
+ try{
+  const raw=atob(base64),bytes=Uint8Array.from(raw,c=>c.charCodeAt(0));
+  playbackURL=URL.createObjectURL(new Blob([bytes],{type:mime||"audio/mpeg"}));
+  responseAudio=new Audio(playbackURL);
+  responseAudio.onplay=()=>{setMotion(true,alignment||null,responseAudio);$("identityStatus").textContent="Resposta em voz autorizada configurada no servidor. Movimentos 3D disponíveis somente com malha aprovada."};
+  responseAudio.onended=()=>{setMotion(false);URL.revokeObjectURL(playbackURL);playbackURL=null;responseAudio=null;finishAnswer()};
+  responseAudio.onerror=()=>{setMotion(false);finishAnswer();note("Erro no áudio autorizado.")};
+  responseAudio.play().catch(()=>{note("O navegador bloqueou o áudio: toque em 'Parar fala' e envie a pergunta novamente.");finishAnswer()});
+ }catch(e){note("Falha ao reproduzir voz do servidor.");finishAnswer()}
+}
+function record(q,a){lastAnswer=a;$("answer").textContent=a;log.push({q,a});const p=document.createElement("p");p.textContent=q+" → "+a;$("session").prepend(p)}
+async function ask(q){q=(q||"").trim();if(!q){waitingForAnswer=false;return}waitingForAnswer=true;const thisRequest=++requestSerial;if(rec){try{rec.stop()}catch(e){}}film.pause();sample.pause();stopVoices();note("Preparando resposta...");
+if(!$("remote").checked){const a=local(q);record(q,a);$("identityStatus").textContent="Resposta local. Voz oficial disponível apenas na amostra e no Filme 2.";note("Resposta local concluída.");if($("browserVoice").checked)playBrowser(a);else finishAnswer();return}
+const url=$("endpoint").value.trim();if(!url.startsWith("https://")){note("Configure um endpoint HTTPS válido.");finishAnswer();return}
+if(!tempToken){tempToken=window.prompt("Informe a credencial TEMPORÁRIA do operador. Não utilize este modo num quiosque público.")||"";if(!tempToken){note("Integração privada não autorizada.");finishAnswer();return}}
+try{const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),30000);
+let response;try{response=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+tempToken},body:JSON.stringify({message:q,history:log.slice(-3)}),signal:controller.signal})}finally{clearTimeout(timer)}
+if(!response.ok){if(response.status===401)tempToken="";throw Error("Servidor não respondeu ou acesso recusado")}
+const data=await response.json();if(thisRequest!==requestSerial)return;if(!data.answer||typeof data.answer!=="string")throw Error("Resposta vazia");
+record(q,data.answer);note("Resposta do servidor recebida.");
+if(data.audio_base64){playOfficial(data.audio_base64,data.audio_mime_type,data.alignment)}
+else if($("browserVoice").checked){playBrowser(data.answer)}
+else{$("identityStatus").textContent="Resposta textual recebida; voz oficial não foi disponibilizada pelo servidor.";finishAnswer()}
+}catch(e){if(thisRequest!==requestSerial)return;note("Não foi possível consultar o servidor: "+e.message);$("identityStatus").textContent="Não houve geração de voz verificada; utilize o modo local se desejar.";finishAnswer()}}
+$("ask").onclick=()=>ask($("q").value);
+$("mic").onclick=()=>{
+ if(live){note("Conversa contínua ativa; utilize 'Encerrar conversa' primeiro.");return}
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SR){note("Microfone indisponível. Digite sua pergunta.");return}
+ if(!confirm("Autoriza o navegador a reconhecer UMA pergunta? O serviço do navegador poderá processar o áudio externamente."))return;
+ const r=new SR();r.lang="pt-BR";r.interimResults=false;
+ r.onresult=e=>{const text=e.results[0][0].transcript;$("q").value=text;ask(text)};
+ r.onerror=e=>note("Erro no microfone: "+e.error);
+ r.start();note("Ouvindo uma pergunta...");
+};
+$("startLive").onclick=()=>{
+ if(live)return;
+ if(!confirm("Iniciar conversa contínua? O microfone ficará ativo durante perguntas e pausará quando o NEXUS responder. O reconhecimento pode usar serviços externos do navegador."))return;
+ if(!$("remote").checked){note("Para perguntas livres e voz oficial, configure o servidor privado antes de iniciar uma conversa pública.");return}
+ live=true;
+ $("liveSignal").classList.add("on");
+ $("liveSignal").textContent="Modo de diálogo iniciado.";
+ if(!voiceActive)maybeListen();
+};
+$("stopLive").onclick=()=>{
+ live=false;requestSerial++;waitingForAnswer=false;
+ if(rec){try{rec.abort()}catch(e){}rec=null}
+ stopVoices();$("liveSignal").classList.remove("on");
+ $("liveSignal").textContent="Conversa encerrada e microfone interrompido.";
+};
+$("stopAudio").onclick=()=>{stopVoices();waitingForAnswer=false;requestSerial++;};$("disconnect").onclick=()=>{tempToken="";$("remote").checked=false;note("Operador desconectado.")};
+$("exportSession").onclick=()=>download("NEXUS_SESSAO.txt",log.map(x=>"Pergunta: "+x.q+"\nResposta: "+x.a).join("\n\n"),"text/plain");
+$("clearSession").onclick=()=>{log.length=0;$("session").replaceChildren();note("Sessão apagada desta aba.")};
+function download(filename,content,mime){const url=URL.createObjectURL(new Blob([content],{type:mime}));const a=document.createElement("a");a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+$("startMark").onclick=()=>{markA=film.currentTime;markB=null;$("markStatus").textContent="Início: "+markA.toFixed(2)+" segundos."};
+$("endMark").onclick=()=>{markB=film.currentTime;$("markStatus").textContent="Início: "+(markA===null?"—":markA.toFixed(2))+" | Fim: "+markB.toFixed(2)};
+$("saveMark").onclick=()=>{if(markA===null||markB===null||markB<=markA){$("markStatus").textContent="Marque início e fim em ordem crescente.";return}const item={source:"Filme 2",type:$("gesture").value,start:Number(markA.toFixed(3)),end:Number(markB.toFixed(3)),validated:false};marks.push(item);const b=document.createElement("button");b.textContent=item.type+" "+item.start+"–"+item.end+"s";b.onclick=()=>{film.currentTime=item.start;film.play()};$("markList").append(b);$("markStatus").textContent="Trecho registrado para revisão artística."};
+$("exportMarks").onclick=()=>download("NEXUS_FILME2_TREJEITOS.json",JSON.stringify({source:"2Conhecimento Deve Circular.mp4",clips:marks},null,2),"application/json");
+</script><script type="module" src="./avatar_motion.js"></script></body></html>

@@ -1,0 +1,27 @@
+name: NEXUS V9 — Testes de interação
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - nexus-persona-v9-audiencia-ao-vivo
+    paths:
+      - "nexus-persona-v9/**"
+      - ".github/workflows/nexus-v9-test.yml"
+  pull_request:
+    branches:
+      - nexus-persona-v8
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Verify frontend, backend, voice, alignment and media exclusivity
+        run: |
+          node nexus-persona-v9/tests/smoke.mjs
+          node nexus-persona-v9/tests/integration.mjs
