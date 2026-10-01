@@ -152,19 +152,19 @@ function playOfficial(base64,mime,alignment){
  }catch(e){note("Falha ao reproduzir voz do servidor.");finishAnswer()}
 }
 function record(q,a){lastAnswer=a;$("answer").textContent=a;log.push({q,a});const p=document.createElement("p");p.textContent=q+" → "+a;$("session").prepend(p)}
-async function ask(q){q=(q||"").trim();if(!q){waitingForAnswer=false;return}waitingForAnswer=true;if(rec){try{rec.stop()}catch(e){}}film.pause();sample.pause();stopVoices();note("Preparando resposta...");
+async function ask(q){q=(q||"").trim();if(!q){waitingForAnswer=false;return}waitingForAnswer=true;const thisRequest=++requestSerial;if(rec){try{rec.stop()}catch(e){}}film.pause();sample.pause();stopVoices();note("Preparando resposta...");
 if(!$("remote").checked){const a=local(q);record(q,a);$("identityStatus").textContent="Resposta local. Voz oficial disponível apenas na amostra e no Filme 2.";note("Resposta local concluída.");if($("browserVoice").checked)playBrowser(a);else finishAnswer();return}
 const url=$("endpoint").value.trim();if(!url.startsWith("https://")){note("Configure um endpoint HTTPS válido.");finishAnswer();return}
 if(!tempToken){tempToken=window.prompt("Informe a credencial TEMPORÁRIA do operador. Não utilize este modo num quiosque público.")||"";if(!tempToken){note("Integração privada não autorizada.");finishAnswer();return}}
 try{const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),30000);
 let response;try{response=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+tempToken},body:JSON.stringify({message:q,history:log.slice(-3)}),signal:controller.signal})}finally{clearTimeout(timer)}
 if(!response.ok){if(response.status===401)tempToken="";throw Error("Servidor não respondeu ou acesso recusado")}
-const data=await response.json();if(!data.answer||typeof data.answer!=="string")throw Error("Resposta vazia");
+const data=await response.json();if(thisRequest!==requestSerial)return;if(!data.answer||typeof data.answer!=="string")throw Error("Resposta vazia");
 record(q,data.answer);note("Resposta do servidor recebida.");
 if(data.audio_base64){playOfficial(data.audio_base64,data.audio_mime_type,data.alignment)}
 else if($("browserVoice").checked){playBrowser(data.answer)}
 else{$("identityStatus").textContent="Resposta textual recebida; voz oficial não foi disponibilizada pelo servidor.";finishAnswer()}
-}catch(e){note("Não foi possível consultar o servidor: "+e.message);$("identityStatus").textContent="Não houve geração de voz verificada; utilize o modo local se desejar."}}
+}catch(e){if(thisRequest!==requestSerial)return;note("Não foi possível consultar o servidor: "+e.message);$("identityStatus").textContent="Não houve geração de voz verificada; utilize o modo local se desejar.";finishAnswer()}}
 $("ask").onclick=()=>ask($("q").value);
 $("mic").onclick=()=>{
  if(live){note("Conversa contínua ativa; utilize 'Encerrar conversa' primeiro.");return}
@@ -191,7 +191,7 @@ $("stopLive").onclick=()=>{
  stopVoices();$("liveSignal").classList.remove("on");
  $("liveSignal").textContent="Conversa encerrada e microfone interrompido.";
 };
-$("stopAudio").onclick=()=>{stopVoices();waitingForAnswer=false;};$("disconnect").onclick=()=>{tempToken="";$("remote").checked=false;note("Operador desconectado.")};
+$("stopAudio").onclick=()=>{stopVoices();waitingForAnswer=false;requestSerial++;};$("disconnect").onclick=()=>{tempToken="";$("remote").checked=false;note("Operador desconectado.")};
 $("exportSession").onclick=()=>download("NEXUS_SESSAO.txt",log.map(x=>"Pergunta: "+x.q+"\nResposta: "+x.a).join("\n\n"),"text/plain");
 $("clearSession").onclick=()=>{log.length=0;$("session").replaceChildren();note("Sessão apagada desta aba.")};
 function download(filename,content,mime){const url=URL.createObjectURL(new Blob([content],{type:mime}));const a=document.createElement("a");a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
