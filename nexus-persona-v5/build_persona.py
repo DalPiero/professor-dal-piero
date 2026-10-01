@@ -224,6 +224,9 @@ scene.frame_set(1)
 bpy.ops.object.select_all(action='DESELECT')
 head.select_set(True);bpy.context.view_layer.objects.active=head
 blend=os.path.join(OUT,"NEXUS_PERSONA_V5_PROTOTIPO.blend")
+# Empacotar a fotografia dentro do .blend para não depender de links externos.
+if photo:
+    bpy.ops.file.pack_all()
 bpy.ops.wm.save_as_mainfile(filepath=blend)
 # GLB should preserve named mesh morph targets when exporter installed.
 try:
