@@ -22,6 +22,8 @@ jobs:
       - name: Build model, blend and glb
         run: |
           mkdir -p output
+          curl --fail --location --retry 3 "https://cdn.creativeclaw.co/u/5dd90fe8/images/1d6c7262-d831-4938-8dba-fee75fd88dae.png" --output nexus-persona-v5/photo_reference.png
+          test -s nexus-persona-v5/photo_reference.png
           NEXUS_OUTPUT="$PWD/output" xvfb-run -a blender -b -t 2 -P nexus-persona-v5/build_persona.py -- --photo "$PWD/nexus-persona-v5/photo_reference.png"
       - name: Validate produced file structure
         run: |
