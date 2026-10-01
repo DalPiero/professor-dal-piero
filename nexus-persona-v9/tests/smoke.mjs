@@ -23,7 +23,7 @@ console.log("PASS: only authorized Film 2 and voice sample in V9 interface");
 assert.ok(html.includes("data.alignment") && motion.includes("character_start_times_seconds"),"Alignment wired");
 assert.ok(motion.includes("MOUTH_A") && motion.includes("JawOpen"),"3D mouth controls");
 assert.ok(server.includes("/with-timestamps") && server.includes("ELEVENLABS_VOICE_ID"),"Voice endpoint and voice ID");
-assert.ok(!server.includes("xi-api-key":"" + "abc"),"No literal API key");
+assert.ok(!server.includes("sk-proj-"),"No obvious literal project key");
 assert.ok(server.includes("ACCESS_TOKEN") && server.includes("ALLOWED_ORIGIN"),"Operator restrictions");
 console.log("PASS: voice timing and backend restrictions wired");
 assert.ok(html.includes("rec.abort()") && html.includes("live=false") && html.includes("if(thisRequest!==requestSerial)return"),"Dialog stop/cancel");
