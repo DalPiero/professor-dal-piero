@@ -1,0 +1,19 @@
+{
+  "version": "8",
+  "purpose": "NEXUS PERSONA — somente Filme 2 e amostra de voz recebida",
+  "visual_media": [
+    {
+      "name": "2Conhecimento Deve Circular.mp4",
+      "url": "https://cdn.creativeclaw.co/u/5dd90fe8/videos/11cead6e-fce2-4fe3-a730-552bcea8d253.mp4"
+    }
+  ],
+  "voice_reference": [
+    {
+      "name": "Voz Dal Piero(2).mp3",
+      "url": "https://cdn.creativeclaw.co/u/5dd90fe8/audio/fb294ade-7ee7-4a26-8fce-1023ab38cffe.mp3"
+    }
+  ],
+  "other_media": [],
+  "dynamic_voice_status": "requires authorized provider voice ID and credentials",
+  "novel_lip_sync_status": "not yet implemented"
+}
